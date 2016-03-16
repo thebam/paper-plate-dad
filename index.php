@@ -55,7 +55,7 @@ require_once 'includes/header.php';
                         <p><?=$tasteRating?> out of 5 
                     <a href="editMeal.php?name=<?=urlencode($title)?>">edit</a> - 
                     <a href="deleteMeal.php?id=<?=$id?>">delete</a></p>
-                        <a class="btn btn-default">Details</a>
+                        <a class="btn btn-default" href="showRecipe.php?name=<?=urlencode($title)?>">Details</a>
             </div>
             <div class="col-md-3 recipeImage">
                 <img src="<?=$imageUrl?>" alt="<?=$title?>" />

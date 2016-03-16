@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-require_once "recipe.php";
+require_once "includes/recipe.php";
 $error = '';
 if(count($_GET)>0){
         $myRecipe = new Cooking\recipe();
