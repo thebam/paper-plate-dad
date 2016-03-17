@@ -19,19 +19,19 @@ class Recipe
     public $prepRating;
     public $cleanRating;
     public $servings;
-    
+    public $prepTimeInMinutes;
     public $ingredients = array();
     public $quantities = array();
     public $instructions = array();
 
-    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings){
+    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime){
         $output="";
         if($tempTitle!==NULL &&  $tempMainIngredientId !== NULL && $tempCuisineId !== NULL && $tempUrl !== NULL&& $tempTaste !== NULL)
         {
             $connection = openConnection();
-            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
             $recipes = $connection->prepare($query);
-            $recipes->bind_param('siisisssiii',$tempTitle, intval($tempMainIngredientId),intval($tempCuisineId),$tempUrl,intval($tempTaste),$tempNotes,$tempImage,$tempVideo,intval($tempPrep),intval($tempClean),intval($tempServings));
+            $recipes->bind_param('siisisssiiii',$tempTitle, intval($tempMainIngredientId),intval($tempCuisineId),$tempUrl,intval($tempTaste),$tempNotes,$tempImage,$tempVideo,intval($tempPrep),intval($tempClean),intval($tempServings),intval($tempPrepTime));
             
             //TODO add $query->erroe_list
             $recipes->execute();
@@ -87,13 +87,13 @@ class Recipe
         }
     }
     
-    public static function editRecipe($id,$tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings){
+    public static function editRecipe($id,$tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime){
         if($id!==NULL &&$tempTitle!==NULL &&  $tempMainIngredientId !== NULL && $tempUrl !== NULL)
         {
             $connection = openConnection();
-            $query = 'UPDATE recipes SET Title=?, MainIngredientId=?,CuisineId=?, Url=?,TasteRating=?,Notes=?,ImageUrl=?,VideoUrl=?,PrepRating=?,CleanRating=?,Servings=? WHERE id=?';
+            $query = 'UPDATE recipes SET Title=?, MainIngredientId=?,CuisineId=?, Url=?,TasteRating=?,Notes=?,ImageUrl=?,VideoUrl=?,PrepRating=?,CleanRating=?,Servings=?,PrepTime=? WHERE id=?';
             $recipes = $connection->prepare($query);
-            $recipes->bind_param('siisisssiiii',$tempTitle, intval($tempMainIngredientId),intval($tempCuisineId),$tempUrl,intval($tempTaste),$tempNotes,$tempImage,$tempVideo,intval($tempPrep),intval($tempClean),intval($tempServings),intval($id));
+            $recipes->bind_param('siisisssiiiii',$tempTitle, intval($tempMainIngredientId),intval($tempCuisineId),$tempUrl,intval($tempTaste),$tempNotes,$tempImage,$tempVideo,intval($tempPrep),intval($tempClean),intval($tempServings),intval($tempPrepTime),intval($id));
             $recipes->execute();
             
             $query = "DELETE FROM steps WHERE RecipeId = ?";
@@ -134,17 +134,43 @@ class Recipe
         }
     }
     
-    public static function allRecipes(){
+    public static function search($keyword){
+        
+        $param = "%{$keyword}%";
+        
         $connection = openConnection();
         $recipes=array();
-        $query = 'SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl FROM recipes ORDER BY Title';
-        $results = $connection->query($query);
-        while ($row = $results->fetch_assoc()) {
+        $query = 'SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime FROM recipes WHERE Title LIKE ? ORDER BY Title';
+        $recipe = $connection->prepare($query);
+        $recipe->bind_param('s',$param);
+        $recipe->execute();
+        $result = $recipe->get_result();
+        while ($row = $result->fetch_array())
+        {
             $recipes[]=$row;
         }
         $connection->close();
         return ($recipes);
     }
+    
+    public static function allRecipes($keyword){
+        
+        $recipes=array();
+        if($keyword!=null && !empty($keyword)){
+            $recipes = Recipe::search($keyword);
+        }else{
+            $connection = openConnection();
+            $query = 'SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime FROM recipes ORDER BY Title';
+            $results = $connection->query($query);
+            while ($row = $results->fetch_assoc()) {
+                $recipes[]=$row;
+            }
+            $connection->close();
+        }
+        return ($recipes);
+    }
+    
+    
     
     
     public function getRecipeById(){}
@@ -155,7 +181,7 @@ class Recipe
         $recipe = $connection->prepare($query);
         $recipe->bind_param('s',$recipeName);
         $recipe->execute();
-        $recipe->bind_result($id,$title,$mainIngredientId,$cuisineId,$url,$tasteRating,$notes,$dateCreated,$imageUrl,$videoUrl,$prepRating,$cleanRating,$servings);
+        $recipe->bind_result($id,$title,$mainIngredientId,$cuisineId,$url,$tasteRating,$notes,$dateCreated,$imageUrl,$videoUrl,$prepRating,$cleanRating,$servings,$prepTimeInMinute);
         $recipe->store_result();
         if ($recipe->num_rows>0) {
             while($recipe->fetch()){
@@ -173,6 +199,7 @@ class Recipe
                 $this->prepRating = $prepRating;
                 $this->cleanRating = $cleanRating;
                 $this->servings = $servings;
+                $this->prepTimeInMinutes = $prepTimeInMinute;
             }
         }
         $recipe->close();

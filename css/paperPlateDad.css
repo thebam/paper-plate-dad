@@ -27,18 +27,23 @@
             text-transform: lowercase;
         }
         
+        
+        
+        
         .recipes {
             background-color: #fff;
         }
         
         .recipes .row{
-            background-color: #fff;
-            
+            background-color: #fff;    
         }
+        
+        
         
         .recipes .row .recipeImage {
            padding-left: 0;
            padding-right: 0;
+           
         }
         
         .recipes .row .recipeImage img {

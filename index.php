@@ -1,12 +1,21 @@
 <?php
 namespace Cooking;
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 require_once 'includes/recipe.php';
-$recipes = Recipe::allRecipes();
+$keyword = "";
+if(count($_GET)>0){
+    $keyword = $_GET['q'];
+}
+
+$recipes = Recipe::allRecipes($keyword);
 $pageTitle = "Recipes";
 require_once 'includes/header.php';
 ?>
+<div class="container">
         <h1>Recipes</h1>
         <a href="addRecipe.php">Add Recipe</a>
+        </div>
         <div class="recipes container-fluid">
         
             <?php
@@ -16,8 +25,13 @@ require_once 'includes/header.php';
             $prepRating = 0;
             $cleanRating = 0;
             $imageUrl = '';
+            $prepTimeInMinutes=1;
+            $servings=1;
             $recipeCnt = 0;
             $blnAlternate = false;
+            
+            
+            $descriptionBlock="";
             foreach($recipes as $recipe){
                 if (array_key_exists('Id',$recipe)){ 
                     $id =  $recipe['Id'];
@@ -37,6 +51,27 @@ require_once 'includes/header.php';
                 if (array_key_exists('ImageUrl',$recipe)){ 
                     $imageUrl =  $recipe['ImageUrl'];
                 }
+                if (array_key_exists('PrepTime',$recipe)){ 
+                    $prepTimeInMinute =  $recipe['PrepTime'];
+                }
+                if (array_key_exists('Servings',$recipe)){ 
+                    $servings =  $recipe['Servings'];
+                }
+                
+                $descriptionBlock = '<div class="col-md-3 recipeDetails">';
+                $descriptionBlock .= '<h2>'.$title.'</h2>';
+                $descriptionBlock .= '<p>'.$servings.' Servings</p>';
+                $descriptionBlock .= '<p>Taste: '.$tasteRating.' out of 5<br/>Difficulty: ';
+                $descriptionBlock .= $prepRating.' out of 5<br/>Clean Up: ';
+                $descriptionBlock .= $cleanRating.' out of 5';
+                $descriptionBlock .= '</p>';
+                $descriptionBlock .= '<p>Total Time: '.$prepTimeInMinute.' Minutes</p>';
+                $descriptionBlock .= '<a class="btn btn-default" href="showRecipe.php?name='.urlencode($title).'">Details</a>';
+                $descriptionBlock .= '<p>';
+                $descriptionBlock .= '<a href="editRecipe.php?name='.urlencode($title).'">edit</a> - ';
+                $descriptionBlock .= '<a href="deleteRecipe.php?id='.$id.'">delete</a></p></div>';
+                
+                
                 
                 if ($recipeCnt ===0){
                     ?>
@@ -49,36 +84,13 @@ require_once 'includes/header.php';
                         <img src="<?=$imageUrl?>" alt="<?=$title?>" />
                         <div class=" glyphicon glyphicon-triangle-left arrow"></div>
                     </div>
-                    <div class="col-md-3 recipeDetails">
-                        
-                        <h2><?=$title?></h2>
-                        <p><?=$tasteRating?> out of 5<br/>
-                        <?=$prepRating?> out of 5<br/>
-                        <?=$cleanRating?> out of 5
-                    </p>
-                        <a class="btn btn-default" href="showRecipe.php?name=<?=urlencode($title)?>">Details</a>
-                        <p>
-                        <a href="editMeal.php?name=<?=urlencode($title)?>">edit</a> - 
-                    <a href="deleteMeal.php?id=<?=$id?>">delete</a>
-                        </p>
-                        
-                    </div>
+                    
                   <?php
+                  echo $descriptionBlock;
                 }else{
                   ?>
                   <div class="recipe rowBackwards">
-            <div class="col-md-3 recipeDetails">
-                <h2><?=$title?></h2>
-                        <p><?=$tasteRating?> out of 5<br/>
-                        <?=$prepRating?> out of 5<br/>
-                        <?=$cleanRating?> out of 5
-                    </p>
-                        <a class="btn btn-default" href="showRecipe.php?name=<?=urlencode($title)?>">Details</a>
-                        <p>
-                        <a href="editMeal.php?name=<?=urlencode($title)?>">edit</a> - 
-                    <a href="deleteMeal.php?id=<?=$id?>">delete</a>
-                        </p>
-            </div>
+           <?= $descriptionBlock?>
             <div class="col-md-3 recipeImage">
                 <img src="<?=$imageUrl?>" alt="<?=$title?>" />
                 <div class=" glyphicon glyphicon-triangle-right arrow"></div>
@@ -105,50 +117,6 @@ require_once 'includes/header.php';
                     </div>
         
     </div>
-        
-        
-        
-        
-        
-        
-         
-            
-
-            <!--<div class="col-md-3 recipeImage">
-                <img src="http://technext.github.io/restaurant-html-template/images/blog/blog-img-2.jpg" />
-            </div>
-            <div class="col-md-3 recipeDetails">
-                <h2>What Waffles</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <a class="btn btn-default">Details</a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="recipe rowBackwards">
-            <div class="col-md-3 recipeDetails">
-                <h2>Sup Steak</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <a class="btn btn-default">Details</a>
-            </div>
-            <div class="col-md-3 recipeImage">
-                <img src="http://technext.github.io/restaurant-html-template/images/blog/blog-img-3.jpg" />
-            </div>
-            </div>
-            <div class="recipe rowBackwards">
-            <div class="col-md-3 recipeDetails">
-                <h2>So Sausage</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <a class="btn btn-default">Details</a>
-            </div>
-            <div class="col-md-3 recipeImage">
-                <img src="http://technext.github.io/restaurant-html-template/images/blog/blog-img-4.jpg" />
-            </div>
-            </div>-->
-        
-        
-        
-        
-        
     <?php
     require_once 'includes/footer.php';
     ?>

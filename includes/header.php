@@ -25,14 +25,20 @@
         <nav>
             <ul>
                 <li><a href="index.php">Recipes</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="about.php">About</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
             <div class="container">
+                <form action="index.php" method="get">
+                
+                
                 <div class="input-group">
-                        <input type="text" class="form-control" aria-label="search" placeholder="search" />
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-cutlery"></span></span>
+                    <input type="text" name="q" class="form-control" placeholder="search" />
+                    <span class="input-group-btn"> <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-cutlery"></span></button> </span> 
                 </div>
+                
+                
+                </form>
             </div>
         </nav>
     </header>

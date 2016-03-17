@@ -7,6 +7,7 @@ if(count($_GET)>0){
         $myRecipe = new Cooking\recipe();
         $myRecipe->getRecipeByName(urldecode($_GET['name']));
     }
+    $pageTitle = $myRecipe->title;
 require_once 'includes/header.php';
 ?>
 
@@ -17,6 +18,7 @@ require_once 'includes/header.php';
             <p>Recipe Source : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
             <p>Cuisine :<?=$myRecipe->cuisineName?></p>
             <p>Servings :<?=$myRecipe->servings?></p>
+            <p>Time :<?=$myRecipe->prepTimeInMinutes?> minutes</p>
             <hr/>
             <p>TASTE</p>
             <div class="progress">
@@ -106,10 +108,10 @@ require_once 'includes/header.php';
             
             
             
-            
-            
+            <div class="container-fluid">
+            <h2>Comments</h2>
             <p><?=$myRecipe->notes?></p>
-            
+            </div>
         <?php
     require_once 'includes/footer.php';
     ?>
