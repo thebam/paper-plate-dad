@@ -2,6 +2,7 @@
 namespace Cooking;
 require_once 'includes/recipe.php';
 $recipes = Recipe::allRecipes();
+$pageTitle = "Recipes";
 require_once 'includes/header.php';
 ?>
         <h1>Recipes</h1>
@@ -12,6 +13,8 @@ require_once 'includes/header.php';
             $id = 0;
             $title = '';
             $tasteRating = 0;
+            $prepRating = 0;
+            $cleanRating = 0;
             $imageUrl = '';
             $recipeCnt = 0;
             $blnAlternate = false;
@@ -24,6 +27,12 @@ require_once 'includes/header.php';
                 }
                 if (array_key_exists('TasteRating',$recipe)){ 
                     $tasteRating =  $recipe['TasteRating'];
+                }
+                if (array_key_exists('PrepRating',$recipe)){ 
+                    $prepRating =  $recipe['PrepRating'];
+                }
+                if (array_key_exists('CleanRating',$recipe)){ 
+                    $cleanRating =  $recipe['CleanRating'];
                 }
                 if (array_key_exists('ImageUrl',$recipe)){ 
                     $imageUrl =  $recipe['ImageUrl'];
@@ -38,13 +47,21 @@ require_once 'includes/header.php';
                 ?>
                     <div class="col-md-3 recipeImage">
                         <img src="<?=$imageUrl?>" alt="<?=$title?>" />
+                        <div class=" glyphicon glyphicon-triangle-left arrow"></div>
                     </div>
                     <div class="col-md-3 recipeDetails">
+                        
                         <h2><?=$title?></h2>
-                        <p><?=$tasteRating?> out of 5 
-                    <a href="editMeal.php?name=<?=urlencode($title)?>">edit</a> - 
-                    <a href="deleteMeal.php?id=<?=$id?>">delete</a></p>
-                        <a class="btn btn-default">Details</a>
+                        <p><?=$tasteRating?> out of 5<br/>
+                        <?=$prepRating?> out of 5<br/>
+                        <?=$cleanRating?> out of 5
+                    </p>
+                        <a class="btn btn-default" href="showRecipe.php?name=<?=urlencode($title)?>">Details</a>
+                        <p>
+                        <a href="editMeal.php?name=<?=urlencode($title)?>">edit</a> - 
+                    <a href="deleteMeal.php?id=<?=$id?>">delete</a>
+                        </p>
+                        
                     </div>
                   <?php
                 }else{
@@ -52,13 +69,19 @@ require_once 'includes/header.php';
                   <div class="recipe rowBackwards">
             <div class="col-md-3 recipeDetails">
                 <h2><?=$title?></h2>
-                        <p><?=$tasteRating?> out of 5 
-                    <a href="editMeal.php?name=<?=urlencode($title)?>">edit</a> - 
-                    <a href="deleteMeal.php?id=<?=$id?>">delete</a></p>
+                        <p><?=$tasteRating?> out of 5<br/>
+                        <?=$prepRating?> out of 5<br/>
+                        <?=$cleanRating?> out of 5
+                    </p>
                         <a class="btn btn-default" href="showRecipe.php?name=<?=urlencode($title)?>">Details</a>
+                        <p>
+                        <a href="editMeal.php?name=<?=urlencode($title)?>">edit</a> - 
+                    <a href="deleteMeal.php?id=<?=$id?>">delete</a>
+                        </p>
             </div>
             <div class="col-md-3 recipeImage">
                 <img src="<?=$imageUrl?>" alt="<?=$title?>" />
+                <div class=" glyphicon glyphicon-triangle-right arrow"></div>
             </div>
             </div>
             <?php

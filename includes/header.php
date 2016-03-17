@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Paper Plate Dad</title>
+    <title><?=$pageTitle?></title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
@@ -21,11 +21,18 @@
 
 <body>
     <header>
-        Paper Plate Dad
-        <ul>
-            <li>About</li>
-            <li>Recipe</li>
-            <li>Contact</li>
-        </ul>
-        SEARCH
+        <div class="logoTitle">Paper Plate Dad</div>
+        <nav>
+            <ul>
+                <li><a href="index.php">Recipes</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="container">
+                <div class="input-group">
+                        <input type="text" class="form-control" aria-label="search" placeholder="search" />
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-cutlery"></span></span>
+                </div>
+            </div>
+        </nav>
     </header>

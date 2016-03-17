@@ -137,7 +137,7 @@ class Recipe
     public static function allRecipes(){
         $connection = openConnection();
         $recipes=array();
-        $query = 'SELECT Id, Title, TasteRating, ImageUrl FROM recipes ORDER BY Title';
+        $query = 'SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl FROM recipes ORDER BY Title';
         $results = $connection->query($query);
         while ($row = $results->fetch_assoc()) {
             $recipes[]=$row;
