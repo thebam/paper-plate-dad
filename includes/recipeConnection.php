@@ -1,23 +1,20 @@
 <?php
-$dbPassword='cooking';
-$dbUser='chef';
-$dbServer='localhost';
-$dbName='recipes';
 $connection;
 
 function openConnection()
 {
-    global $dbPassword;
-global $dbUser;
-global $dbServer;
-global $dbName;
-   global $connection;
-   $connection = new mysqli($dbServer,$dbUser, $dbPassword, $dbName);
-   if($connection->connect_errno){
-    exit('Database connection failed due to:' .$connection->connect_error);
-   }
-   return $connection;
+    global $connection;
+    $dbPassword='cooking';
+    $dbUser='chef';
+    $dbServer='localhost';
+    $dbName='recipes';
+    
+    try{
+        $connection = new PDO('mysql:host='.$dbServer.';dbname='.$dbName.'',$dbUser, $dbPassword);
+        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $connection;
+    }catch(PDOException $e){
+        echo $e->getMessage();       
+    }
 }
-
-
 ?>

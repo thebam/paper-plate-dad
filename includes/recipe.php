@@ -68,6 +68,11 @@ class Recipe
         if($id!==NULL)
         {
             $connection = openConnection();
+            // $params = array(':id' => $id);
+            // $query = "DELETE FROM steps WHERE RecipeId = :id";
+            // $connection->prepare($query);
+            // $connection->execute($params);
+            
             $query = "DELETE FROM steps WHERE RecipeId = ?";
             $recipe = $connection->prepare($query);
             $recipe->bind_param('i',intval($id));
@@ -135,137 +140,127 @@ class Recipe
     }
     
     public static function search($keyword){
-        
-        $param = "%{$keyword}%";
-        
-        $connection = openConnection();
         $recipes=array();
-        $query = 'SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime FROM recipes WHERE Title LIKE ? ORDER BY Title';
-        $recipe = $connection->prepare($query);
-        $recipe->bind_param('s',$param);
-        $recipe->execute();
-        $result = $recipe->get_result();
-        while ($row = $result->fetch_array())
-        {
-            $recipes[]=$row;
+        if(!empty(trim($keyword))){
+            $param = "%{$keyword}%";
+            $connection = openConnection();
+            $query = 'SELECT Id, Title, TasteRating, PrepRating, CleanRating, ImageUrl, Servings, PrepTime FROM recipes WHERE Title LIKE :keyword OR Id IN (SELECT RecipeId FROM recipeIngredients WHERE IngredientId IN (SELECT Id FROM Ingredients WHERE Title LIKE :keyword)) ORDER BY Title';
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':keyword',$param,\PDO::PARAM_STR);
+            $statement->execute();
+            $results = $statement->setFetchMode(\PDO::FETCH_ASSOC);
+            if($results){
+                while ($row = $statement->fetch()) {
+                    $recipes[]=$row;
+                }
+            }
+            $connection=null;
         }
-        $connection->close();
         return ($recipes);
     }
     
     public static function allRecipes($keyword){
-        
         $recipes=array();
         if($keyword!=null && !empty($keyword)){
             $recipes = Recipe::search($keyword);
         }else{
             $connection = openConnection();
-            $query = 'SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime FROM recipes ORDER BY Title';
-            $results = $connection->query($query);
-            while ($row = $results->fetch_assoc()) {
-                $recipes[]=$row;
+            $statement = $connection->prepare('SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime FROM recipes ORDER BY Title');
+            $statement->execute();
+            $results = $statement->setFetchMode(\PDO::FETCH_ASSOC);
+            if($results){
+                while ($row = $statement->fetch()) {
+                    $recipes[]=$row;
+                }
             }
-            $connection->close();
+            $connection=null;
         }
         return ($recipes);
     }
     
-    
-    
-    
-    public function getRecipeById(){}
-    
     public function getRecipeByName($recipeName){
-        $connection = openConnection();
-        $query = 'SELECT * FROM recipes WHERE title = ?';
-        $recipe = $connection->prepare($query);
-        $recipe->bind_param('s',$recipeName);
-        $recipe->execute();
-        $recipe->bind_result($id,$title,$mainIngredientId,$cuisineId,$url,$tasteRating,$notes,$dateCreated,$imageUrl,$videoUrl,$prepRating,$cleanRating,$servings,$prepTimeInMinute);
-        $recipe->store_result();
-        if ($recipe->num_rows>0) {
-            while($recipe->fetch()){
-                $this->id = $id;
-                $this->title = $title;
-                $this->mainIngredientId = $mainIngredientId;
-                $this->cuisineId = $cuisineId;
-                $this->tasteRating = $tasteRating;
-                $this->notes = $notes;
-                $this->url = $url;
-                $this->dateModified = $dateCreated;
-                
-                $this->imageUrl = $imageUrl;
-                $this->videoUrl = $videoUrl;
-                $this->prepRating = $prepRating;
-                $this->cleanRating = $cleanRating;
-                $this->servings = $servings;
-                $this->prepTimeInMinutes = $prepTimeInMinute;
+        if(!empty(trim($recipeName))){
+            $connection = openConnection();        
+            $query = 'SELECT * FROM recipes WHERE title = :title LIMIT 1';
+            $statement = $connection->prepare($query); 
+            $statement->bindParam(':title',$recipeName);
+            $statement->execute();
+            $results = $statement->fetch(\PDO::FETCH_ASSOC);
+            if($results){       
+                $this->id = $results['Id'];
+                $this->title = $results['Title'];
+                $this->mainIngredientId = $results['MainIngredientId'];
+                $this->cuisineId = $results['CuisineId'];
+                $this->tasteRating = $results['TasteRating'];
+                $this->notes = $results['Notes'];
+                $this->url = $results['Url'];
+                $this->dateModified = $results['DateModified'];    
+                $this->imageUrl = $results['ImageUrl'];
+                $this->videoUrl = $results['VideoUrl'];
+                $this->prepRating = $results['PrepRating'];
+                $this->cleanRating = $results['CleanRating'];
+                $this->servings = $results['Servings'];
+                $this->prepTimeInMinutes = $results['PrepTime'];
             }
+            $connection = null;
+            $this->getRecipeInstructions();
+            $this->getRecipeIngredients();
+            $this->cuisineName = $this->getCuisineNameById($this->cuisineId);
         }
-        $recipe->close();
-        $connection->close();
-        
-        $this->getRecipeInstructions();
-        $this->getRecipeIngredients();
-        $this->cuisineName = $this->getCuisineNameById($this->cuisineId);
     }
      
     private function getRecipeInstructions(){
-        $connection = openConnection();
-        $recipeId = intval($this->id);
-        $query = 'SELECT Description FROM steps WHERE RecipeId = ? ORDER BY DisplayOrder';
-        $recipe = $connection->prepare($query);
-        $recipe->bind_param('i',$recipeId);
-        $recipe->execute();
-        $recipe->bind_result($description);
-        $recipe->store_result();
-        if ($recipe->num_rows>0) {
-            while($recipe->fetch()){
-                array_push($this->instructions,$description);
+        if(is_numeric($this->id)){
+            $connection = openConnection();
+            $recipeId = intval($this->id);
+            $query = 'SELECT Description FROM steps WHERE RecipeId = :recipeId ORDER BY DisplayOrder';
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':recipeId',$recipeId, \PDO::PARAM_INT);
+            $statement->execute();
+            if ($statement->rowCount()>0) {
+                while($results = $statement->fetchObject()){
+                    array_push($this->instructions,$results->Description);
+                }
             }
+            $connection=null;
         }
-        $recipe->close();
-        $connection->close();
     }
 
     private function getRecipeIngredients(){
-        $connection = openConnection();
-        $recipeId = intval($this->id);
-        $query = 'SELECT i.Title,r.Quantity FROM recipeIngredients r, ingredients i WHERE r.IngredientId = i.Id AND r.RecipeId = ?';
-        $recipe = $connection->prepare($query);
-        $recipe->bind_param('i',$recipeId);
-        $recipe->execute();
-        $recipe->bind_result($ingredient,$quantity);
-        $recipe->store_result();
-        if ($recipe->num_rows>0) {
-            while($recipe->fetch()){
-                array_push($this->ingredients,$ingredient);
-                array_push($this->quantities,$quantity);
+        if(is_numeric($this->id)){
+            $connection = openConnection();
+            $recipeId = intval($this->id);
+            $query = 'SELECT i.Title,r.Quantity FROM recipeIngredients r, ingredients i WHERE r.IngredientId = i.Id AND r.RecipeId = :recipeId';
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':recipeId',$recipeId,\PDO::PARAM_INT);
+            $statement->execute();
+            if ($statement->rowCount()>0) {
+                while($results = $statement->fetchObject()){
+                    array_push($this->ingredients,$results->Title);
+                    array_push($this->quantities,$results->Quantity);
+                }
             }
+            $connection=null;
         }
-        $recipe->close();
-        $connection->close();
     }
     
     public function getCuisineNameById($cuisineId){
-        $connection = openConnection();
-        $cuisineId = intval($cuisineId);
-        $cuisineName = "";
-        $query = 'SELECT Title FROM cuisines WHERE Id = ?';
-        $recipe = $connection->prepare($query);
-        $recipe->bind_param('i',$cuisineId);
-        $recipe->execute();
-        $recipe->bind_result($title);
-        $recipe->store_result();
-        if ($recipe->num_rows>0) {
-            while($recipe->fetch()){
-                $cuisineName = $title;
+        if(is_numeric($cuisineId)){
+            $connection = openConnection();
+            $cuisineId = intval($cuisineId);
+            $cuisineName = "";
+            $query = 'SELECT Title FROM cuisines WHERE Id = :cuisineId LIMIT 1';
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':cuisineId',$cuisineId,\PDO::PARAM_INT);
+            $statement->execute();
+            if ($statement->rowCount()>0) {
+                while($results = $statement->fetchObject()){
+                    $cuisineName = $results->Title;
+                }
             }
+            $connection=null;
         }
-        $recipe->close();
-        $connection->close();
         return $cuisineName;
     }
-    
 }
 ?>

@@ -33,7 +33,7 @@
                 
                 
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="search" />
+                    <input type="text" name="q" class="form-control" placeholder="search by ingredient or recipe title" />
                     <span class="input-group-btn"> <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-cutlery"></span></button> </span> 
                 </div>
                 

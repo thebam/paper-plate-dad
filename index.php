@@ -5,16 +5,29 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 require_once 'includes/recipe.php';
 $keyword = "";
+$recipeSearchTerm  = "";
 if(count($_GET)>0){
     $keyword = $_GET['q'];
+    $recipeSearchTerm = $keyword;
 }
-
 $recipes = Recipe::allRecipes($keyword);
+
 $pageTitle = "Recipes";
 require_once 'includes/header.php';
 ?>
 <div class="container">
-        <h1>Recipes</h1>
+    <h1>Recipes</h1>
+    <?php
+    if(!empty(trim($recipeSearchTerm))){
+    ?>
+        <hr/>
+        <h2>search results for <em>'<?=$recipeSearchTerm?>'</em></h2>
+    <?php
+        if(count($recipes)===0){
+            echo "No recipes found. Please try a different search term. You can search for recipes by title or ingredient.";
+        }
+    }
+    ?>
         <?php
         if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
         ?>
