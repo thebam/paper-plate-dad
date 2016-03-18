@@ -1,6 +1,13 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
+
+
+if(!isset($_SESSION["id"]) || !isset($_SESSION["username"])){
+    header('Location: index.php');
+}
+
 
 require_once "includes/recipe.php";
 
@@ -272,8 +279,7 @@ require_once 'includes/header.php';
             <a href="index.php" class="btn btn-default">Cancel</a>
         </form>
          </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        
         <script>
         $("#ingredientsContainer").on('click','.addIngredient', function(){
             $(".ingredient").first().clone().appendTo("#ingredientsContainer");

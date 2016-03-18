@@ -1,5 +1,6 @@
 <?php
 namespace Cooking;
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 require_once 'includes/recipe.php';
@@ -14,7 +15,13 @@ require_once 'includes/header.php';
 ?>
 <div class="container">
         <h1>Recipes</h1>
+        <?php
+        if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
+        ?>
         <a href="addRecipe.php">Add Recipe</a>
+        <?php
+        }
+        ?>
         </div>
         <div class="recipes container-fluid">
         
@@ -67,11 +74,12 @@ require_once 'includes/header.php';
                 $descriptionBlock .= '</p>';
                 $descriptionBlock .= '<p>Total Time: '.$prepTimeInMinute.' Minutes</p>';
                 $descriptionBlock .= '<a class="btn btn-default" href="showRecipe.php?name='.urlencode($title).'">Details</a>';
-                $descriptionBlock .= '<p>';
-                $descriptionBlock .= '<a href="editRecipe.php?name='.urlencode($title).'">edit</a> - ';
-                $descriptionBlock .= '<a href="deleteRecipe.php?id='.$id.'">delete</a></p></div>';
-                
-                
+                if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
+                    $descriptionBlock .= '<p>';
+                    $descriptionBlock .= '<a href="editRecipe.php?name='.urlencode($title).'">edit</a> - ';
+                    $descriptionBlock .= '<a href="deleteRecipe.php?id='.$id.'">delete</a></p>';
+                }
+                $descriptionBlock .= '</div>';
                 
                 if ($recipeCnt ===0){
                     ?>

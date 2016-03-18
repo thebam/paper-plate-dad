@@ -2,6 +2,7 @@
     <hr/>
     <div class="container">
     &copy <?=date("Y")?>
+    <a href="login.php">login</a>
     </div>
 </footer>
 
