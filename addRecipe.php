@@ -1,38 +1,25 @@
 <?php
+namespace Cooking;
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-
 if(!isset($_SESSION["id"]) || !isset($_SESSION["username"])){
     header('Location: index.php');
 }
-
-
 require_once "includes/recipe.php";
+require_once "includes/cuisine.php";
+require_once "includes/ingredient.php";
 $error = '';
 if(count($_POST)>0){
-     $result = Cooking\Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime']);
+     $result = Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime']);
      if($result==='success'){
          header('Location: index.php');
      }else{
          $error=$result;
      }
 }else{
-    $connection = openConnection();
-    $query = "SELECT Id,Title FROM Ingredients ORDER BY Title";
-    $ingredients = array();
-    $results = $connection->query($query);
-    while ($row = $results->fetch_assoc()){
-        $ingredients[]=$row;
-    }
-
-    $query = "SELECT Id,Title FROM Cuisines ORDER BY Title";
-    $cuisines = array();
-    $results = $connection->query($query);
-    while ($row = $results->fetch_assoc()){
-        $cuisines[]=$row;
-    }
-    $connection->close();
+    $cuisines = Cuisine::getAllCuisines();
+    $ingredients = Ingredient::getAllIngredients();
 }
 $pageTitle = "Add Recipe";
 require_once 'includes/header.php';
@@ -191,22 +178,6 @@ require_once 'includes/header.php';
             <input type="submit" value="Add Recipe" class="btn btn-default" />
         </form>
         </div>
-       
-        <script>
-        $("#ingredientsContainer").on('click','.addIngredient', function(){
-            $(".ingredient").first().clone().appendTo("#ingredientsContainer");
-        });
-         $("#ingredientsContainer").on('click','.removeIngredient', function(){
-            $(this).parent().parent().remove();
-        });
-        
-        $("#instructionsContainer").on('click','.addStep', function(){
-            $(".instruction").first().clone().appendTo("#instructionsContainer");
-        });
-         $("#instructionsContainer").on('click','.removeStep', function(){
-            $(this).parent().parent().remove();
-        });
-        </script>
 <?php
     require_once 'includes/footer.php';
     ?>

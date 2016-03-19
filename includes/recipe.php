@@ -26,116 +26,136 @@ class Recipe
 
     public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime){
         $output="";
-        if($tempTitle!==NULL &&  $tempMainIngredientId !== NULL && $tempCuisineId !== NULL && $tempUrl !== NULL&& $tempTaste !== NULL)
+        if(!empty(trim($tempTitle)))
         {
             $connection = openConnection();
-            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-            $recipes = $connection->prepare($query);
-            $recipes->bind_param('siisisssiiii',$tempTitle, intval($tempMainIngredientId),intval($tempCuisineId),$tempUrl,intval($tempTaste),$tempNotes,$tempImage,$tempVideo,intval($tempPrep),intval($tempClean),intval($tempServings),intval($tempPrepTime));
-            
-            //TODO add $query->erroe_list
-            $recipes->execute();
-            if($connection->insert_id){
-                $recipeId = $connection->insert_id;
+            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime) VALUES (:title,:mainIngredientId,:cuisineId,:url,:tasteRating,:notes,:imageUrl,:videoUrl,:prepRating,:cleanRating,:servings,:prepTime)';
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':title',$tempTitle, \PDO::PARAM_STR);
+            $statement->bindParam(':mainIngredientId',$tempMainIngredientId, \PDO::PARAM_INT);
+            $statement->bindParam(':cuisineId',$tempCuisineId, \PDO::PARAM_INT);
+            $statement->bindParam(':url',$tempUrl, \PDO::PARAM_STR);
+            $statement->bindParam(':tasteRating',$tempTaste, \PDO::PARAM_INT);
+            $statement->bindParam(':notes',$tempNotes, \PDO::PARAM_STR);
+            $statement->bindParam(':imageUrl',$tempImage, \PDO::PARAM_STR);
+            $statement->bindParam(':videoUrl',$tempVideo, \PDO::PARAM_STR);
+            $statement->bindParam(':prepRating',$tempPrep, \PDO::PARAM_INT);
+            $statement->bindParam(':cleanRating',$tempClean, \PDO::PARAM_INT);
+            $statement->bindParam(':servings',$tempServings, \PDO::PARAM_INT);
+            $statement->bindParam(':prepTime',$tempPrepTime, \PDO::PARAM_INT);
+
+            $statement->execute();
+            if($connection->lastInsertId()){
+                $id = $connection->lastInsertId();
                 if(count($tempIngredients) > 0){
                     if(count($tempIngredients) == count($tempQuantities)){
                         for ($x=0;$x<count($tempIngredients);$x++) {
-                            $query = 'INSERT INTO recipeIngredients (RecipeId, IngredientId,Quantity) VALUES (?,?,?)';
-                            $recipes = $connection->prepare($query);
-                            $recipes->bind_param('iis',$recipeId, intval($tempIngredients[$x]),$tempQuantities[$x]);
-                            $recipes->execute();
+                            $query = 'INSERT INTO recipeIngredients (RecipeId, IngredientId,Quantity) VALUES (:id,:ingredientId,:quantity)';
+                            $statement = $connection->prepare($query);
+                            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+                            $statement->bindParam(':ingredientId',$tempIngredients[$x], \PDO::PARAM_INT);
+                            $statement->bindParam(':quantity',$tempQuantities[$x], \PDO::PARAM_STR);
+                            $statement->execute();
                         }
                     }
                 }
                 if(count($tempSteps) > 0){
                     for ($x=0;$x<count($tempSteps);$x++) {
-                        $query = 'INSERT INTO steps (RecipeId, Description ,DisplayOrder) VALUES (?,?,?)';
-                        $recipes = $connection->prepare($query);
-                        $recipes->bind_param('isi',$recipeId,$tempSteps[$x],intval($x));
-                        $recipes->execute();
+                        $query = 'INSERT INTO steps (RecipeId, Description ,DisplayOrder) VALUES (:id,:description,:displayOrder)';
+                        $statement = $connection->prepare($query);
+                        $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+                        $statement->bindParam(':description',$tempSteps[$x], \PDO::PARAM_STR);
+                        $statement->bindParam(':displayOrder',$x, \PDO::PARAM_INT);
+                        $statement->execute();
                     }
                 }
                 $output ="success";
             }else{
                 $output ="failed";
             }
-            $recipes->close();
-            $connection->close();
+            $connection=null;
         }
         return $output;
     }
     public static function deleteRecipe($id){
-        if($id!==NULL)
+        if(!empty(trim($id)))
         {
             $connection = openConnection();
-            // $params = array(':id' => $id);
-            // $query = "DELETE FROM steps WHERE RecipeId = :id";
-            // $connection->prepare($query);
-            // $connection->execute($params);
+            $query = "DELETE FROM steps WHERE RecipeId = :id";
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+            $statement->execute();
             
-            $query = "DELETE FROM steps WHERE RecipeId = ?";
-            $recipe = $connection->prepare($query);
-            $recipe->bind_param('i',intval($id));
-            $recipe->execute();
+            $query = "DELETE FROM recipeIngredients WHERE RecipeId = :id";
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+            $statement->execute();
             
-            $query = "DELETE FROM recipeIngredients WHERE RecipeId = ?";
-            $recipe = $connection->prepare($query);
-            $recipe->bind_param('i',intval($id));
-            $recipe->execute();
-            
-            $query = "DELETE FROM recipes WHERE Id = ?;";
-            $recipe = $connection->prepare($query);
-            $recipe->bind_param('i',intval($id));
-            $recipe->execute();
-            $recipe->close();
-            $connection->close();
+            $query = "DELETE FROM recipes WHERE Id = :id";
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+            $statement->execute();
+            $connection=null;
         }
     }
     
     public static function editRecipe($id,$tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime){
-        if($id!==NULL &&$tempTitle!==NULL &&  $tempMainIngredientId !== NULL && $tempUrl !== NULL)
+        if(!empty(trim($id)) && !empty(trim($tempTitle)))
         {
             $connection = openConnection();
-            $query = 'UPDATE recipes SET Title=?, MainIngredientId=?,CuisineId=?, Url=?,TasteRating=?,Notes=?,ImageUrl=?,VideoUrl=?,PrepRating=?,CleanRating=?,Servings=?,PrepTime=? WHERE id=?';
-            $recipes = $connection->prepare($query);
-            $recipes->bind_param('siisisssiiiii',$tempTitle, intval($tempMainIngredientId),intval($tempCuisineId),$tempUrl,intval($tempTaste),$tempNotes,$tempImage,$tempVideo,intval($tempPrep),intval($tempClean),intval($tempServings),intval($tempPrepTime),intval($id));
-            $recipes->execute();
+            $query = 'UPDATE recipes SET Title=:title, MainIngredientId=:mainIngredientId,CuisineId=:cuisineId, Url=:url,TasteRating=:tasteRating,Notes=:notes,ImageUrl=:imageUrl,VideoUrl=:videoUrl,PrepRating=:prepRating,CleanRating=:cleanRating,Servings=:servings,PrepTime=:prepTime WHERE id=:id';
             
-            $query = "DELETE FROM steps WHERE RecipeId = ?";
-            $recipe = $connection->prepare($query);
-            $recipe->bind_param('i',intval($id));
-            $recipe->execute();
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':title',$tempTitle, \PDO::PARAM_STR);
+            $statement->bindParam(':mainIngredientId',$tempMainIngredientId, \PDO::PARAM_INT);
+            $statement->bindParam(':cuisineId',$tempCuisineId, \PDO::PARAM_INT);
+            $statement->bindParam(':url',$tempUrl, \PDO::PARAM_STR);
+            $statement->bindParam(':tasteRating',$tempTaste, \PDO::PARAM_INT);
+            $statement->bindParam(':notes',$tempNotes, \PDO::PARAM_STR);
+            $statement->bindParam(':imageUrl',$tempImage, \PDO::PARAM_STR);
+            $statement->bindParam(':videoUrl',$tempVideo, \PDO::PARAM_STR);
+            $statement->bindParam(':prepRating',$tempPrep, \PDO::PARAM_INT);
+            $statement->bindParam(':cleanRating',$tempClean, \PDO::PARAM_INT);
+            $statement->bindParam(':servings',$tempServings, \PDO::PARAM_INT);
+            $statement->bindParam(':prepTime',$tempPrepTime, \PDO::PARAM_INT);
+            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+            $statement->execute();
             
-            $query = "DELETE FROM recipeIngredients WHERE RecipeId = ?";
-            $recipe = $connection->prepare($query);
-            $recipe->bind_param('i',intval($id));
-            $recipe->execute();
+            $query = "DELETE FROM steps WHERE RecipeId = :id";
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+            $statement->execute();
+            
+            $query = "DELETE FROM recipeIngredients WHERE RecipeId = :id";
+            $statement = $connection->prepare($query);
+            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+            $statement->execute();
             
             
             if(count($tempIngredients) > 0){
                     if(count($tempIngredients) == count($tempQuantities)){
                         for ($x=0;$x<count($tempIngredients);$x++) {
-                            $query = 'INSERT INTO recipeIngredients (RecipeId, IngredientId,Quantity) VALUES (?,?,?)';
-                            $recipes = $connection->prepare($query);
-                            $recipes->bind_param('iis',$id, intval($tempIngredients[$x]),$tempQuantities[$x]);
-                            $recipes->execute();
+                            $query = 'INSERT INTO recipeIngredients (RecipeId, IngredientId,Quantity) VALUES (:id,:ingredientId,:quantity)';
+                            $statement = $connection->prepare($query);
+                            $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+                            $statement->bindParam(':ingredientId',$tempIngredients[$x], \PDO::PARAM_INT);
+                            $statement->bindParam(':quantity',$tempQuantities[$x], \PDO::PARAM_STR);
+                            $statement->execute();
                         }
                     }
                 }
                 if(count($tempSteps) > 0){
                     for ($x=0;$x<count($tempSteps);$x++) {
-                        $query = 'INSERT INTO steps (RecipeId, Description ,DisplayOrder) VALUES (?,?,?)';
-                        $recipes = $connection->prepare($query);
-                        $recipes->bind_param('isi',$id,$tempSteps[$x],intval($x));
-                        $recipes->execute();
+                        $query = 'INSERT INTO steps (RecipeId, Description ,DisplayOrder) VALUES (:id,:description,:displayOrder)';
+                        $statement = $connection->prepare($query);
+                        $statement->bindParam(':id',$id, \PDO::PARAM_INT);
+                        $statement->bindParam(':description',$tempSteps[$x], \PDO::PARAM_STR);
+                        $statement->bindParam(':displayOrder',$x, \PDO::PARAM_INT);
+                        $statement->execute();
                     }
                 }
             
-            
-            
-            
-            $recipes->close();
-            $connection->close();
+            $connection=null;
         }
     }
     

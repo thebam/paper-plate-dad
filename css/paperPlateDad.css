@@ -6,6 +6,8 @@
             color: #fff;
         }
         
+        
+        
         header {
             text-align: center;
             width: 100%;
@@ -27,7 +29,9 @@
             text-transform: lowercase;
         }
         
-        
+        .error{
+            color:#ff0000;
+        }
         
         
         .recipes {
@@ -135,8 +139,17 @@
             padding: 0 0 15px 0;
         }
         
+        .footerLeft{
+            text-align: left;
+            float: left;
+            width: 50%
+        }
         
-        
+        .footerRight{
+            text-align: right;
+            float: right;
+            width: 50%
+        }
         
         
         @media screen and (min-width:992px){

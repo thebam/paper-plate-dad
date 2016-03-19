@@ -70,6 +70,9 @@ require_once 'includes/header.php';
                 }
                 if (array_key_exists('ImageUrl',$recipe)){ 
                     $imageUrl =  $recipe['ImageUrl'];
+                    if(empty(trim($imageUrl))){
+                        $imageUrl = "photos/empty-plates.jpg";
+                    }
                 }
                 if (array_key_exists('PrepTime',$recipe)){ 
                     $prepTimeInMinute =  $recipe['PrepTime'];

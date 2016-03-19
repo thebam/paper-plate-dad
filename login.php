@@ -7,50 +7,54 @@ $error = '';
 if(count($_POST)>0){
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $hash = crypt($password,'hamburger');
-    $guid = "";
-     $connection = openConnection();
-            $query = 'SELECT GUID FROM cooks WHERE Username=? AND Password=?';
-            $cooks = $connection->prepare($query);
-            $cooks->bind_param('ss',$username,$hash);
-            $cooks->execute();
-            $results = $cooks->get_result();
-            if($results->num_rows===1){
-                $guid = "";
-                while ($row = $results->fetch_array())
-                {
-                    $guid = $row["GUID"];
-                }
-                $_SESSION["id"] = $guid;
-                $_SESSION["username"] = $username;
+    if(!empty(trim($username)) && !empty(trim($password))){
+        $hash = crypt($password,'hamburger');
+        $guid = "";
+        $connection = openConnection();
+        $query = 'SELECT GUID FROM cooks WHERE Username=:username AND Password=:password';
+        $statement = $connection->prepare($query);
+        $statement->bindParam(':username',$username,\PDO::PARAM_STR);
+        $statement->bindParam(':password',$hash,\PDO::PARAM_STR);
+        $statement->execute();
+        if($statement->rowCount()===1){        
+            while ($row = $statement->fetchObject())
+            {
+                $guid = $row->GUID;
             }
-            $connection->close();
+        }else{
+            $error="The username or password you entered was not correct.";
+        }
+        $connection=null;    
             
-            
-            if($guid != ""){
+        if($guid != ""){
+            $_SESSION["id"] = $guid;
+            $_SESSION["username"] = $username;
             header('Location: index.php');
-            }
+        }else{
+            $error="The username or password you entered was not correct.";
+        }
+    }else{
+        $error="Enter a username and password to login.";
+    }
 }
 $pageTitle = "Login";
 require_once 'includes/header.php';
 ?>
 <div class="container">
-        <h1>LOGIN</h1>
-        <p><?=$error?></p>
-        <form action="login.php" method="post" role="form">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" name="username" class="form-control"  required/>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" name="password" class="form-control"  required/>
-            </div>
-            
-            
-            <input type="submit" value="Login" class="btn btn-default" />
-        </form>
+    <h1>LOGIN</h1>
+    <p class="error"><?=$error?></p>
+    <form action="login.php" method="post" role="form">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" name="username" class="form-control"  required/>
         </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" class="form-control"  required/>
+        </div>    
+        <input type="submit" value="Login" class="btn btn-default" />
+    </form>
+</div>
 <?php
-    require_once 'includes/footer.php';
-    ?>
+require_once 'includes/footer.php';
+?>

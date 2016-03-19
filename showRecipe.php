@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 require_once "includes/recipe.php";
@@ -8,11 +9,19 @@ if(count($_GET)>0){
         $myRecipe->getRecipeByName(urldecode($_GET['name']));
     }
     $pageTitle = $myRecipe->title;
+    
+    
+                    $imageUrl =  $myRecipe->imageUrl;
+                    if(empty(trim($imageUrl))){
+                        $imageUrl = "photos/empty-plates.jpg";
+                    }
+                
+    
 require_once 'includes/header.php';
 ?>
 
         <div class="hero" >
-           <img class="bgImage" src="<?=$myRecipe->imageUrl?>"/>
+           <img class="bgImage" src="<?=$imageUrl?>"/>
                 <div class="col-md-4">
             <h1><?=$myRecipe->title?></h1>
             <p>Recipe Source : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
@@ -62,7 +71,7 @@ require_once 'includes/header.php';
                 
                 
                 
-                <img class="mainImage" src="<?=$myRecipe->imageUrl?>"/>
+                <img class="mainImage" src="<?=$imageUrl?>"/>
                 <?php
             }
                 ?>
