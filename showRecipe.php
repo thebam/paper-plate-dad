@@ -9,13 +9,14 @@ if(count($_GET)>0){
         $myRecipe->getRecipeByName(urldecode($_GET['name']));
     }
     $pageTitle = $myRecipe->title;
+    $pageDesc = $myRecipe->description;
     
     
                     $imageUrl =  $myRecipe->imageUrl;
                     if(empty(trim($imageUrl))){
                         $imageUrl = "photos/empty-plates.jpg";
                     }
-                
+                $pageImage = $imageUrl;
     
 require_once 'includes/header.php';
 ?>
@@ -24,6 +25,7 @@ require_once 'includes/header.php';
            <img class="bgImage" src="<?=$imageUrl?>"/>
                 <div class="col-md-4">
             <h1><?=$myRecipe->title?></h1>
+            <p><?=$myRecipe->description?></p>
             <p>Recipe Source : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
             <p>Cuisine :<?=$myRecipe->cuisineName?></p>
             <p>Servings :<?=$myRecipe->servings?></p>

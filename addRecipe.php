@@ -11,7 +11,7 @@ require_once "includes/cuisine.php";
 require_once "includes/ingredient.php";
 $error = '';
 if(count($_POST)>0){
-     $result = Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime']);
+     $result = Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description']);
      if($result==='success'){
          header('Location: index.php');
      }else{
@@ -31,6 +31,10 @@ require_once 'includes/header.php';
             <div class="form-group">
                 <label for="title">Title:</label>
                 <input type="text" name="title" class="form-control"  required/>
+            </div>
+            <div class="form-group">
+                <label for="url">Description:</label>
+                <input type="text" name="description" class="form-control" maxlength="160"  required/>
             </div>
             <div class="form-group">
                 <label for="url">Url:</label>
@@ -115,13 +119,22 @@ require_once 'includes/header.php';
             </div>
             
             <label>Cooking Instructions:</label>
-            <div id="instructionsContainer" class="controls form-inline">
-            <div class="instruction controls form-inline">
+            <div id="instructionsContainer" class="controls">
+            <div class="instruction controls">
                 <div class="form-group">
-                    <label>Step:</label>
+                    <div class="col-md-1">
+                        <label>Step:</label>
+                    </div>
+                    <div class="col-md-9">
                     <textarea name="instructions[]" class="form-control"></textarea>
+                    </div>
+                    <div class="col-md-1">
                     <div class="addStep btn btn-default form-control">+</div>
+                    </div>
+                    <div class="col-md-1">
                     <div class="removeStep btn btn-default form-control">-</div>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
             </div>

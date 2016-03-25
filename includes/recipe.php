@@ -20,16 +20,17 @@ class Recipe
     public $cleanRating;
     public $servings;
     public $prepTimeInMinutes;
+    public $description;
     public $ingredients = array();
     public $quantities = array();
     public $instructions = array();
 
-    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime){
+    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc){
         $output="";
         if(!empty(trim($tempTitle)))
         {
             $connection = openConnection();
-            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime) VALUES (:title,:mainIngredientId,:cuisineId,:url,:tasteRating,:notes,:imageUrl,:videoUrl,:prepRating,:cleanRating,:servings,:prepTime)';
+            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime,Description) VALUES (:title,:mainIngredientId,:cuisineId,:url,:tasteRating,:notes,:imageUrl,:videoUrl,:prepRating,:cleanRating,:servings,:prepTime,:description)';
             $statement = $connection->prepare($query);
             $statement->bindParam(':title',$tempTitle, \PDO::PARAM_STR);
             $statement->bindParam(':mainIngredientId',$tempMainIngredientId, \PDO::PARAM_INT);
@@ -43,7 +44,7 @@ class Recipe
             $statement->bindParam(':cleanRating',$tempClean, \PDO::PARAM_INT);
             $statement->bindParam(':servings',$tempServings, \PDO::PARAM_INT);
             $statement->bindParam(':prepTime',$tempPrepTime, \PDO::PARAM_INT);
-
+            $statement->bindParam(':description',$tempDesc, \PDO::PARAM_STR);
             $statement->execute();
             if($connection->lastInsertId()){
                 $id = $connection->lastInsertId();
@@ -99,11 +100,11 @@ class Recipe
         }
     }
     
-    public static function editRecipe($id,$tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime){
+    public static function editRecipe($id,$tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc){
         if(!empty(trim($id)) && !empty(trim($tempTitle)))
         {
             $connection = openConnection();
-            $query = 'UPDATE recipes SET Title=:title, MainIngredientId=:mainIngredientId,CuisineId=:cuisineId, Url=:url,TasteRating=:tasteRating,Notes=:notes,ImageUrl=:imageUrl,VideoUrl=:videoUrl,PrepRating=:prepRating,CleanRating=:cleanRating,Servings=:servings,PrepTime=:prepTime WHERE id=:id';
+            $query = 'UPDATE recipes SET Title=:title, MainIngredientId=:mainIngredientId,CuisineId=:cuisineId, Url=:url,TasteRating=:tasteRating,Notes=:notes,ImageUrl=:imageUrl,VideoUrl=:videoUrl,PrepRating=:prepRating,CleanRating=:cleanRating,Servings=:servings,PrepTime=:prepTime,Description=:description WHERE id=:id';
             
             $statement = $connection->prepare($query);
             $statement->bindParam(':title',$tempTitle, \PDO::PARAM_STR);
@@ -118,6 +119,7 @@ class Recipe
             $statement->bindParam(':cleanRating',$tempClean, \PDO::PARAM_INT);
             $statement->bindParam(':servings',$tempServings, \PDO::PARAM_INT);
             $statement->bindParam(':prepTime',$tempPrepTime, \PDO::PARAM_INT);
+            $statement->bindParam(':description',$tempDesc, \PDO::PARAM_STR);
             $statement->bindParam(':id',$id, \PDO::PARAM_INT);
             $statement->execute();
             
@@ -221,6 +223,7 @@ class Recipe
                 $this->cleanRating = $results['CleanRating'];
                 $this->servings = $results['Servings'];
                 $this->prepTimeInMinutes = $results['PrepTime'];
+                $this->description = $results['Description'];
             }
             $connection = null;
             $this->getRecipeInstructions();

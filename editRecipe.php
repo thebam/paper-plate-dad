@@ -10,7 +10,7 @@ require_once "includes/recipe.php";
 require_once "includes/cuisine.php";
 require_once "includes/ingredient.php";
 if(count($_POST)>0){
-    Recipe::editRecipe($_POST['id'],$_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime']);
+    Recipe::editRecipe($_POST['id'],$_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description']);
     header('Location: index.php');
 }else{
     if(count($_GET)>0){
@@ -30,6 +30,10 @@ require_once 'includes/header.php';
             <div class="form-group">
                 <label for="title">Title:</label>
                 <input type="text" name="title" class="form-control" value="<?=$myRecipe->title?>"  required/>
+            </div>
+            <div class="form-group">
+                <label for="url">Description:</label>
+                <input type="text" name="description" class="form-control" value="<?=$myRecipe->description?>" maxlength="160"  required/>
             </div>
             <div class="form-group">
                 <label for="url">Url:</label>
