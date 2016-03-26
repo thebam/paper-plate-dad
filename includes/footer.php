@@ -1,6 +1,7 @@
         <footer>
-            <hr/>
+            
             <div class="container">
+                <hr/>
                 <div class="footerLeft">
                     &copy <?=date("Y")?>
                 </div>
@@ -17,6 +18,7 @@
                     }
                     ?>
                 </div>
+                <div class="clearfix"></div>
             </div>
         </footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

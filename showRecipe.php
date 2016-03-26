@@ -9,7 +9,8 @@ if(count($_GET)>0){
         $myRecipe->getRecipeByName(urldecode($_GET['name']));
     }
     $pageTitle = $myRecipe->title;
-    $pageDesc = $myRecipe->description;
+    $pageDescription = $myRecipe->description;
+    $pageURL = "";
     
     
                     $imageUrl =  $myRecipe->imageUrl;

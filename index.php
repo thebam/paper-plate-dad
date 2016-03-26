@@ -13,6 +13,9 @@ if(count($_GET)>0){
 $recipes = Recipe::allRecipes($keyword);
 
 $pageTitle = "Recipes";
+$pageDescription = "The cooking adventures of a husband and father.";
+$pageURL = "";
+$pageImage = "http://paperplatedad.com/photos/empty-plates.jpg";
 require_once 'includes/header.php';
 ?>
 <div class="container">

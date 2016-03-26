@@ -63,6 +63,7 @@
         
         .recipes .row .recipeDetails h2{
             text-transform: uppercase;
+            font-size: 2em;
         }
         
         .recipes .rowBackwards{
@@ -138,7 +139,9 @@
         .instructions ul li{
             padding: 0 0 15px 0;
         }
-        
+        footer{
+            padding-bottom: 60px;
+        }
         .footerLeft{
             text-align: left;
             float: left;
@@ -151,37 +154,51 @@
             width: 50%
         }
         
+        .controlGroup{
+            border: solid #ccc 1px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .form-inline .form-group {
+            width:100%;
+        }
+        .form-inline .form-group textarea {
+            width:100%;
+        }
+        
+        
         
         @media screen and (min-width:992px){
-        .recipes .row .recipeImage .arrow {
-           position: absolute;
-           top:40%;
-           right:-.35em;
-           display: block;
-           font-size: 5em;
-           color: #fff;
-        }
+            .recipes .row .recipeImage .arrow {
+            position: absolute;
+            top:35%;
+            right:-.30em;
+            display: block;
+            font-size: 7em;
+            color: #fff;
+            }
 
-        .recipes .rowBackwards{
-            display: inline;
-        }
-        .recipes .rowBackwards .recipeImage{
-            display: inline;
-        }
-        
-        .recipes .rowBackwards .recipeImage .arrow {
-           position: absolute;
-           top:40%;
-           left:-.35em;
-           display: block;
-           font-size: 5em;
-           color: #fff;
-        }
-        .recipes .rowBackwards .recipeDetails{
-            display: inline;
-        }
-        
-        
-        
-        
+            .recipes .rowBackwards{
+                display: inline;
+            }
+            .recipes .rowBackwards .recipeImage{
+                display: inline;
+            }
+            
+            .recipes .rowBackwards .recipeImage .arrow {
+            position: absolute;
+            top:35%;
+            left:-.30em;
+            display: block;
+            font-size: 7em;
+            color: #fff;
+            }
+            .recipes .rowBackwards .recipeDetails{
+                display: inline;
+            }
+            
+            .form-inline .form-group textarea {
+                width:85%;
+            }
         }

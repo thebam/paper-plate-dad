@@ -130,7 +130,7 @@ require_once 'includes/header.php';
                  }
                      for ($ingredientCnt=0;$ingredientCnt<count($myRecipe->ingredients);$ingredientCnt++) {
                         ?>
-            <div class="ingredient controls form-inline">
+            <div class="ingredient controls form-inline controlGroup">
                 <div class="form-group">
                     <label>Ingredient:</label>
                     <select name="ingredients[]" class="form-control">
@@ -162,7 +162,7 @@ require_once 'includes/header.php';
             </div>
             
             <label>Cooking Instructions:</label>
-            <div id="instructionsContainer" class="controls form-inline">
+            <div id="instructionsContainer" class="controls form-inline controlGroup">
                 <?php
                  if(count($myRecipe->instructions)==0){
                      ?>

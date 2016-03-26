@@ -7,7 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><?=$pageTitle?></title>
+    <meta name="description" content="<?=$pageDescription?>">
+    <meta name="author" content="Paper Plate Dad">
 
+    <!-- Facebook -->
+    <meta property="fb:app_id" content="829664503806006" /> 
+<!-- Facebook, LinkedIn, Pinterest Open Graph data -->
+    <meta property="og:site_name" content="Paper Plate Dad" />
+    <meta property="og:title" content="<?=$pageTitle?>" />
+    <meta property="og:description" content="<?=$pageDescription?>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://paperplatedad.com/<?=$pageURL?>" />
+    <meta property="og:image" content="<?=$pageImage?>" />
+
+    
+    
+    
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -26,7 +41,7 @@
             <ul>
                 <li><a href="index.php">Recipes</a></li>
                 <li><a href="about.php">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="contact.php">Contact</a></li>
             </ul>
             <div class="container">
                 <form action="index.php" method="get">

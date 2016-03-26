@@ -97,7 +97,7 @@ require_once 'includes/header.php';
             </div>
             
             <label>All Ingredients:</label>
-            <div id="ingredientsContainer" class="controls form-inline">
+            <div id="ingredientsContainer" class="controls form-inline controlGroup">
             <div class="ingredient controls form-inline">
                 <div class="form-group">
                     <label>Ingredient:</label>
@@ -119,22 +119,18 @@ require_once 'includes/header.php';
             </div>
             
             <label>Cooking Instructions:</label>
-            <div id="instructionsContainer" class="controls">
+            <div id="instructionsContainer" class="controls form-inline controlGroup">
             <div class="instruction controls">
                 <div class="form-group">
-                    <div class="col-md-1">
+                    
                         <label>Step:</label>
-                    </div>
-                    <div class="col-md-9">
-                    <textarea name="instructions[]" class="form-control"></textarea>
-                    </div>
-                    <div class="col-md-1">
+                   
+                    <textarea name="instructions[]" class="form-control" rows="4"></textarea>
+                    
                     <div class="addStep btn btn-default form-control">+</div>
-                    </div>
-                    <div class="col-md-1">
+                   
                     <div class="removeStep btn btn-default form-control">-</div>
-                    </div>
-                    <div class="clearfix"></div>
+                   
                 </div>
             </div>
             </div>
