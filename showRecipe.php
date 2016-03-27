@@ -124,6 +124,19 @@ require_once 'includes/header.php';
             <h2>Comments</h2>
             <p><?=$myRecipe->notes?></p>
             </div>
+            
+            <div class="fb-comments" data-href="http://paperplatedad.com/showRecipe.php?<?=$_SERVER['QUERY_STRING']?>" data-numposts="3" data-colorscheme="dark"  data-width="100%"></div>
+            
+            
+            
+            <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=829664503806006";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
         <?php
     require_once 'includes/footer.php';
     ?>
