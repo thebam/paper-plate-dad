@@ -20,7 +20,12 @@
     <meta property="og:url" content="http://paperplatedad.com/<?=$pageURL?>" />
     <meta property="og:image" content="<?=$pageImage?>" />
 
-    
+    <!-- Twitter data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@paperplatedad" />
+    <meta name="twitter:title" content="Paper Plate Dad" />
+    <meta name="twitter:description" content="<?=$pageDescription?>" />
+    <meta name="twitter:image" content="<?=$pageImage?>" />
     
     
     <!-- Bootstrap -->
