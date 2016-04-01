@@ -20,5 +20,18 @@ class Ingredient
         
         return ($ingredients);
     }
+    
+    public function addIngredient($tempTitle){
+        $success = false;
+        $connection = openConnection();
+        $statement = $connection->prepare('INSERT INTO Ingredients (Title) VALUES (:title)');
+        $statement->bind_param(':title',$tempTitle,\PDO::PARAM_STR);
+        $statement->execute();
+        if($connection->lastInsertId()){
+            $success = true;
+        }
+        $connection=null;
+        return $success;
+    }
 }
 ?>

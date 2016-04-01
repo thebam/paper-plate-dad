@@ -39,6 +39,24 @@
                     $(this).parent().parent().remove();
                 });
         });
+        
+        // function buildIngredientDropDown(){
+        //     $.getJSON("includes/ingredient", function(result){
+        //         $.each(result, function(i, field){
+        //             $("div").append(field + " ");
+        //         });
+        //     });
+            
+            
+            
+        //     $.each(selectValues, function(key, value) {   
+        //         $('#mySelect')
+        //             .append($("<option></option>")
+        //             .attr("value",key)
+        //             .text(value)); 
+        //     });
+        // }
+        
         </script>
     </body>
 </html>

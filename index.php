@@ -84,7 +84,7 @@ require_once 'includes/header.php';
                     $servings =  $recipe['Servings'];
                 }
                 
-                $descriptionBlock = '<div class="col-md-3 recipeDetails">';
+                $descriptionBlock = '<div class="col-lg-3 recipeDetails">';
                 $descriptionBlock .= '<h2>'.$title.'</h2>';
                 $descriptionBlock .= '<p>'.$servings.' Servings</p>';
                 $descriptionBlock .= '<p>Taste: '.$tasteRating.' out of 5<br/>Difficulty: ';
@@ -107,7 +107,7 @@ require_once 'includes/header.php';
                 }
                 if($blnAlternate==false){
                 ?>
-                    <div class="col-md-3 recipeImage">
+                    <div class="col-lg-3 recipeImage">
                         <img src="<?=$imageUrl?>" alt="<?=$title?>" />
                         <div class=" glyphicon glyphicon-triangle-left arrow"></div>
                     </div>
@@ -118,7 +118,7 @@ require_once 'includes/header.php';
                   ?>
                   <div class="recipe rowBackwards">
            <?= $descriptionBlock?>
-            <div class="col-md-3 recipeImage">
+            <div class="col-lg-3 recipeImage">
                 <img src="<?=$imageUrl?>" alt="<?=$title?>" />
                 <div class=" glyphicon glyphicon-triangle-right arrow"></div>
             </div>

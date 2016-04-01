@@ -98,7 +98,7 @@ require_once 'includes/header.php';
             
             <label>All Ingredients:</label>
             <div id="ingredientsContainer" class="controls form-inline controlGroup">
-            <div class="ingredient controls form-inline">
+            <div class="ingredient controls">
                 <div class="form-group">
                     <label>Ingredient:</label>
                     <select name="ingredients[]" class="form-control">
