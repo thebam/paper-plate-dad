@@ -47,12 +47,15 @@
         .recipes .row .recipeImage {
            padding-left: 0;
            padding-right: 0;
-           
         }
         
         .recipes .row .recipeImage img {
             width: 100%;
         }
+        
+        
+        
+        
         
         .recipes .row .recipeDetails {
             background-color: #fff;
@@ -82,9 +85,14 @@
         }
         
         
+        .recipes .row {
+            padding-right:15px;
+            padding-left:15px;
+        }
         
-        
-        
+        .recipeDetails .btn{
+            margin-bottom: 15px;
+        }
         
         
         
@@ -169,14 +177,26 @@
         
         
         
-        @media screen and (min-width:992px){
-            .recipes .row .recipeImage .arrow {
+        @media screen and (min-width:1200px){
+            .recipes .row {
+                padding: 0;
+            }
+            
+            
+            .recipes .row .recipeImage {
+            overflow: hidden;
+            }
+            
+            
+            .arrow {
             position: absolute;
-            top:35%;
-            right:-.30em;
-            display: block;
-            font-size: 7em;
+            right:-.3em;
+            top: 0;
+            display: block !important;
             color: #fff;
+            padding: 0;
+            margin: -15px 0 0 0;
+            line-height: 1em;
             }
 
             .recipes .rowBackwards{
@@ -187,13 +207,12 @@
             }
             
             .recipes .rowBackwards .recipeImage .arrow {
-            position: absolute;
-            top:35%;
-            left:-.30em;
-            display: block;
-            font-size: 7em;
-            color: #fff;
+            
+            left:-.3em;
+           
             }
+            
+           
             .recipes .rowBackwards .recipeDetails{
                 display: inline;
             }

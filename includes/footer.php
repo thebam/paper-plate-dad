@@ -25,20 +25,35 @@
         <script src="scripts/bootstrap.min.js"></script>
         <script>
             $(document).ready(function(){
-                $("#ingredientsContainer").on('click','.addIngredient', function(){
-                    $(".ingredient").first().clone().appendTo("#ingredientsContainer");
-                });
-                $("#ingredientsContainer").on('click','.removeIngredient', function(){
-                    $(this).parent().parent().remove();
-                });
+                if ( $( "#ingredientsContainer" ).length ) {
+                    $("#ingredientsContainer").on('click','.addIngredient', function(){
+                        $(".ingredient").first().clone().appendTo("#ingredientsContainer");
+                    });
+                    $("#ingredientsContainer").on('click','.removeIngredient', function(){
+                        $(this).parent().parent().remove();
+                    });
+                    
+                    $("#instructionsContainer").on('click','.addStep', function(){
+                        $(".instruction").first().clone().appendTo("#instructionsContainer");
+                    });
+                    $("#instructionsContainer").on('click','.removeStep', function(){
+                        $(this).parent().parent().remove();
+                    });
+                }
                 
-                $("#instructionsContainer").on('click','.addStep', function(){
-                    $(".instruction").first().clone().appendTo("#instructionsContainer");
-                });
-                $("#instructionsContainer").on('click','.removeStep', function(){
-                    $(this).parent().parent().remove();
-                });
+                
+                if ( $( ".recipeImage" ).length ) {
+                    fontsize = function () {
+                        var fontSize = ($(".recipeImage").height()+30);
+                        $(".recipeImage .arrow").css('font-size', fontSize);
+                    };
+                    $(window).resize(fontsize);
+                    $(document).ready(fontsize);
+                }
+                
         });
+        
+        
         
         // function buildIngredientDropDown(){
         //     $.getJSON("includes/ingredient", function(result){

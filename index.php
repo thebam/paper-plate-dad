@@ -87,10 +87,10 @@ require_once 'includes/header.php';
                 $descriptionBlock = '<div class="col-lg-3 recipeDetails">';
                 $descriptionBlock .= '<h2>'.$title.'</h2>';
                 $descriptionBlock .= '<p>'.$servings.' Servings</p>';
-                $descriptionBlock .= '<p>Taste: '.$tasteRating.' out of 5<br/>Difficulty: ';
-                $descriptionBlock .= $prepRating.' out of 5<br/>Clean Up: ';
-                $descriptionBlock .= $cleanRating.' out of 5';
-                $descriptionBlock .= '</p>';
+                //$descriptionBlock .= '<p>Taste: '.$tasteRating.' out of 5<br/>Difficulty: ';
+                //$descriptionBlock .= $prepRating.' out of 5<br/>Clean Up: ';
+                //$descriptionBlock .= $cleanRating.' out of 5';
+                //$descriptionBlock .= '</p>';
                 $descriptionBlock .= '<p>Total Time: '.$prepTimeInMinute.' Minutes</p>';
                 $descriptionBlock .= '<a class="btn btn-default" href="showRecipe.php?name='.urlencode($title).'">Details</a>';
                 if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
