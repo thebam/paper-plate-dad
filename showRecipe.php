@@ -27,33 +27,62 @@ require_once 'includes/header.php';
                 <div class="col-md-4">
             <h1><?=$myRecipe->title?></h1>
             <p><?=$myRecipe->description?></p>
-            <p>Recipe Source : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
-            <p>Cuisine :<?=$myRecipe->cuisineName?></p>
-            <p>Servings :<?=$myRecipe->servings?></p>
-            <p>Time :<?=$myRecipe->prepTimeInMinutes?> minutes</p>
+            
+            <p>CUISINE :<?=$myRecipe->cuisineName?></p>
+            <p>SERVINGS :<?=$myRecipe->servings?></p>
+            <p>TOTAL TIME :<?=$myRecipe->prepTimeInMinutes?> minutes</p>
+            <p>RECIPE SOURCE : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
             <hr/>
-            <p>TASTE</p>
-            <div class="progress">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$myRecipe->tasteRating?>" aria-valuemin="0" aria-valuemax="5" style="width: <?=(intval($myRecipe->tasteRating)/5)*100?>%">
-                    <?=$myRecipe->tasteRating?>
-                </div>
-            </div>
-            <p>PREPARATION</p>
-            <div class="progress">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$myRecipe->prepRating?>" aria-valuemin="0" aria-valuemax="5" style="width: <?=(intval($myRecipe->prepRating)/5)*100?>%">
-                    <?=$myRecipe->prepRating?>
-                </div>
-            </div>
-            <p>CLEAN UP</p>
-            <div class="progress">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$myRecipe->cleanRating?>" aria-valuemin="0" aria-valuemax="5" style="width: <?=(intval($myRecipe->cleanRating)/5)*100?>%">
-                    <?=$myRecipe->cleanRating?>
-                </div>
-            </div>
+            <p>TASTE :
+            
+            <?php
+            for($x=1;$x<6;$x++){
+                if($x<=$myRecipe->tasteRating){
+                ?>
+                <i class="star glyphicon glyphicon-star"></i>
+                <?php
+                }else{
+                    ?>
+                <i class="star glyphicon glyphicon-star-empty"></i>
+                <?php
+                }
+            }
+            ?>
+            </p>
+            <p>PREPARATION :
+            <?php
+            for($x=1;$x<6;$x++){
+                if($x<=$myRecipe->prepRating){
+                ?>
+                <i class="star glyphicon glyphicon-star"></i>
+                <?php
+                }else{
+                    ?>
+                <i class="star glyphicon glyphicon-star-empty"></i>
+                <?php
+                }
+            }
+            ?>
+            </p>
+            <p>CLEAN UP :
+            <?php
+            for($x=1;$x<6;$x++){
+                if($x<=$myRecipe->cleanRating){
+                ?>
+                <i class="star glyphicon glyphicon-star"></i>
+                <?php
+                }else{
+                    ?>
+                <i class="star glyphicon glyphicon-star-empty"></i>
+                <?php
+                }
+            }
+            ?>
+            </p>
             </div>
             
             
-            <div class="col-md-4">
+            <div class="col-md-8">
                 
             
             
@@ -99,32 +128,37 @@ require_once 'includes/header.php';
                 ?>
                 </ul>
                 </div>
-                
+                <hr/>
                 <div class="container-fluid instructions">
 <h2>Cooking Instructions</h2>
-            <ul>
+            
                 <?php
+                $instuctionCnt =0;
                 foreach ($myRecipe->instructions as $instruction) {
+                    $instuctionCnt++
                 ?>
-                <li><?=$instruction?></li>
+                <div class="instruction col-md-6">
+                    <div class="instructionNumber col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <?=$instuctionCnt?>
+                    </div>
+                    <div class="instructionDetail col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <?=$instruction?>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
                 <?php
                 }
                 ?>
-                </ul>
+                
             
             </div>
             
-
-            
-            
-            
-            
-            
+            <hr/>
             <div class="container-fluid">
-            <h2>Comments</h2>
+            <h2>Notes</h2>
             <p><?=$myRecipe->notes?></p>
             </div>
-            
+            <hr/>
             <div class="fb-comments" data-href="http://paperplatedad.com/showRecipe.php?<?=$_SERVER['QUERY_STRING']?>" data-numposts="3" data-colorscheme="dark"  data-width="100%"></div>
             
             

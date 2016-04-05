@@ -12,7 +12,7 @@ if(count($_GET)>0){
 }
 $recipes = Recipe::allRecipes($keyword);
 
-$pageTitle = "Recipes";
+$pageTitle = "Recipes - Paper Plate Dad";
 $pageDescription = "The cooking adventures of a husband and father.";
 $pageURL = "";
 $pageImage = "http://paperplatedad.com/photos/empty-plates.jpg";
@@ -87,10 +87,7 @@ require_once 'includes/header.php';
                 $descriptionBlock = '<a href="showRecipe.php?name='.urlencode($title).'"><div class="col-md-3 recipeDetails">';
                 $descriptionBlock .= '<h2>'.$title.'</h2>';
                 $descriptionBlock .= '<p><strong>'.$servings.'</strong> Servings<br/>';
-                //$descriptionBlock .= '<p>Taste: '.$tasteRating.' out of 5<br/>Difficulty: ';
-                //$descriptionBlock .= $prepRating.' out of 5<br/>Clean Up: ';
-                //$descriptionBlock .= $cleanRating.' out of 5';
-                //$descriptionBlock .= '</p>';
+                $descriptionBlock .= '<strong>Difficulty: </strong>'.$prepRating.' out of 5<br/>';
                 $descriptionBlock .= '<strong>Total Time: </strong>'.$prepTimeInMinute.' Minutes</p>';
                 
                 if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
