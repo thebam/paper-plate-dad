@@ -84,21 +84,21 @@ require_once 'includes/header.php';
                     $servings =  $recipe['Servings'];
                 }
                 
-                $descriptionBlock = '<div class="col-lg-3 recipeDetails">';
+                $descriptionBlock = '<a href="showRecipe.php?name='.urlencode($title).'"><div class="col-md-3 recipeDetails">';
                 $descriptionBlock .= '<h2>'.$title.'</h2>';
-                $descriptionBlock .= '<p>'.$servings.' Servings</p>';
+                $descriptionBlock .= '<p><strong>'.$servings.'</strong> Servings<br/>';
                 //$descriptionBlock .= '<p>Taste: '.$tasteRating.' out of 5<br/>Difficulty: ';
                 //$descriptionBlock .= $prepRating.' out of 5<br/>Clean Up: ';
                 //$descriptionBlock .= $cleanRating.' out of 5';
                 //$descriptionBlock .= '</p>';
-                $descriptionBlock .= '<p>Total Time: '.$prepTimeInMinute.' Minutes</p>';
-                $descriptionBlock .= '<a class="btn btn-default" href="showRecipe.php?name='.urlencode($title).'">Details</a>';
+                $descriptionBlock .= '<strong>Total Time: </strong>'.$prepTimeInMinute.' Minutes</p>';
+                
                 if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
                     $descriptionBlock .= '<p>';
                     $descriptionBlock .= '<a href="editRecipe.php?name='.urlencode($title).'">edit</a> - ';
                     $descriptionBlock .= '<a href="deleteRecipe.php?id='.$id.'">delete</a></p>';
                 }
-                $descriptionBlock .= '</div>';
+                $descriptionBlock .= '</div></a>';
                 
                 if ($recipeCnt ===0){
                     ?>
@@ -107,9 +107,11 @@ require_once 'includes/header.php';
                 }
                 if($blnAlternate==false){
                 ?>
-                    <div class="col-lg-3 recipeImage">
-                        <img src="<?=$imageUrl?>" alt="<?=$title?>" />
-                        <div class=" glyphicon glyphicon-triangle-left arrow"></div>
+                    <div class="col-md-3 recipeImage">
+                        <img class="food" src="<?=$imageUrl?>" alt="<?=$title?>" />
+                        <div class="arrow">
+                            <img src="images/arrow-left.png"/>
+                        </div>
                     </div>
                     
                   <?php
@@ -118,9 +120,11 @@ require_once 'includes/header.php';
                   ?>
                   <div class="recipe rowBackwards">
            <?= $descriptionBlock?>
-            <div class="col-lg-3 recipeImage">
-                <img src="<?=$imageUrl?>" alt="<?=$title?>" />
-                <div class=" glyphicon glyphicon-triangle-right arrow"></div>
+            <div class="col-md-3 recipeImage">
+                <img class="food" src="<?=$imageUrl?>" alt="<?=$title?>" />
+                <div class="arrow">
+                    <img src="images/arrow-right.png"/>
+                </div>
             </div>
             </div>
             <?php

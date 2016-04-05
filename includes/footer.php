@@ -42,14 +42,7 @@
                 }
                 
                 
-                if ( $( ".recipeImage" ).length ) {
-                    fontsize = function () {
-                        var fontSize = ($(".recipeImage").height()+30);
-                        $(".recipeImage .arrow").css('font-size', fontSize);
-                    };
-                    $(window).resize(fontsize);
-                    $(document).ready(fontsize);
-                }
+                
                 
         });
         
