@@ -62,12 +62,12 @@
             color: #000;
             text-align: center;
             position: relative;
-           
+            margin-bottom: 60px;
         }
         
         .recipes .row .recipeDetails h2{
             text-transform: uppercase;
-            font-size: 1.5em;
+            font-size: 2em;
         }
         
         .recipes .rowBackwards{
@@ -77,9 +77,7 @@
         .recipes .rowBackwards .recipeImage{
             display: table-header-group;
         }
-        .recipes .rowBackwards .recipeDetails{
-            display: table-footer-group;
-        }
+        
         
         .recipes .row .recipeImage .arrow{
             display: none;
@@ -97,11 +95,12 @@
         
         
         
+        
         .hero{
                 position: relative;
     overflow: hidden;
-    padding: 30px 0;
-    margin-top: 15px;
+    padding: 0 0 30px 0;
+    margin-top: 30px;
             }
             
             .hero h1{
@@ -109,6 +108,8 @@
     position: relative;
     z-index: 2;
     color:#fff;
+    margin: 15px;
+    
             }
             
             .hero .bgImage {
@@ -120,9 +121,6 @@
     opacity: .2;
 }
             
-            .hero p{
-                color:#ccc;
-            }
             
             .hero a{
                 color:#fff;
@@ -142,17 +140,18 @@
         
         .ingredients ul li{
             padding: 0 0 15px 0;
-            font-size: 1.25em;
+ 
         }
         .instruction{
             margin-bottom:15px;
         }
         .instruction .instructionNumber{
             font-size: 2em;
-            
+            text-align: right;
         }
         .instruction .instructionDetail{
             border-left:solid 1px #fff;
+            margin-bottom: 30px;
         }
        
         footer{
@@ -194,6 +193,15 @@
             overflow: hidden;
             }
             
+            
+            .recipes .row .recipeDetails {
+
+            margin-bottom: 0;
+        }
+        
+        .recipes .row .recipeDetails h2{
+            font-size: 1.5em;
+        }
             
             .arrow {
             position: absolute;

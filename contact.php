@@ -10,6 +10,7 @@ require_once 'includes/header.php';
     <div class="container">
         <h1>Contact Paper Plate Dad</h1>
         <a href="https://www.facebook.com/paperplatedad">Facebook</a>
+        <a href="https://www.youtube.com/channel/UCfxhhJE5OtKmo7R54imz-Bw/videos">YouTube</a>
     </div>       
 <?php
 require_once 'includes/footer.php';

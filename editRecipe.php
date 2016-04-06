@@ -10,7 +10,7 @@ require_once "includes/recipe.php";
 require_once "includes/cuisine.php";
 require_once "includes/ingredient.php";
 if(count($_POST)>0){
-    Recipe::editRecipe($_POST['id'],$_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description']);
+    Recipe::editRecipe($_POST['id'],$_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description'],$_POST['txtNewCuisine'],$_POST['newIngredients']);
     header('Location: index.php');
 }else{
     if(count($_GET)>0){
@@ -42,6 +42,7 @@ require_once 'includes/header.php';
             <div class="form-group">
                 <label for="cuisine">Cuisine:</label>
             <select name="cuisine" class="form-control">
+                <option value="0">Add New Cuisine</option>
             <?php
             foreach($cuisines as $cuisine){
                 if($cuisine['Id'] == intval($myRecipe->cuisineId)){?>
@@ -55,6 +56,7 @@ require_once 'includes/header.php';
             }
             ?>    
             </select>
+            <input type="text" name="txtNewCuisine" class="form-control" id="txtNewCuisine" />
             </div>
 
             <div class="form-group">
@@ -102,7 +104,7 @@ require_once 'includes/header.php';
             </div>
             
             <label>All Ingredients:</label>
-            <div id="ingredientsContainer" class="controls form-inline">
+            <div id="ingredientsContainer" class="controls form-inline controlGroup">
                 
                 
                  <?php
@@ -130,10 +132,11 @@ require_once 'includes/header.php';
                  }
                      for ($ingredientCnt=0;$ingredientCnt<count($myRecipe->ingredients);$ingredientCnt++) {
                         ?>
-            <div class="ingredient controls form-inline controlGroup">
+            <div class="ingredient controls form-inline">
                 <div class="form-group">
                     <label>Ingredient:</label>
                     <select name="ingredients[]" class="form-control">
+                        <option value="0">Add New Ingredient</option>
                         <?php
                         foreach($ingredients as $ingredient){
                         if($ingredient['Title'] == $myRecipe->ingredients[$ingredientCnt]){?>
@@ -149,6 +152,9 @@ require_once 'includes/header.php';
                     </select>
                     <label>Quantity:</label>
                     <input type="text" name="quantities[]" class="form-control" value="<?=$myRecipe->quantities[$ingredientCnt]?>" required/>
+                    
+                    <input type="text" name="newIngredients[]" class="form-control" value="" />
+                    
                     <div class="addIngredient btn btn-default form-control">+</div>
                     <div class="removeIngredient btn btn-default form-control">-</div>
                 </div>

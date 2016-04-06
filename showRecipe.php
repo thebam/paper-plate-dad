@@ -23,9 +23,10 @@ require_once 'includes/header.php';
 ?>
 
         <div class="hero" >
+            <h1><?=$myRecipe->title?></h1>
            <img class="bgImage" src="<?=$imageUrl?>"/>
                 <div class="col-md-4">
-            <h1><?=$myRecipe->title?></h1>
+            
             <p><?=$myRecipe->description?></p>
             
             <p>CUISINE :<?=$myRecipe->cuisineName?></p>
@@ -79,6 +80,23 @@ require_once 'includes/header.php';
             }
             ?>
             </p>
+            <hr/>
+            <div class="container-fluid ingredients">
+            <h2>Ingredients</h3>
+            <ul>
+                <?php
+                for ($x=0;$x<count($myRecipe->ingredients);$x++) {
+                ?>
+                <li><?=$myRecipe->ingredients[$x]." - ".$myRecipe->quantities[$x]?></li>
+                <?php
+                }
+                ?>
+                </ul>
+                </div>
+                
+            
+            
+            
             </div>
             
             
@@ -116,19 +134,7 @@ require_once 'includes/header.php';
         
         
             
-            <div class="container-fluid ingredients">
-            <h2>Ingredients</h3>
-            <ul>
-                <?php
-                for ($x=0;$x<count($myRecipe->ingredients);$x++) {
-                ?>
-                <li><?=$myRecipe->ingredients[$x]." - ".$myRecipe->quantities[$x]?></li>
-                <?php
-                }
-                ?>
-                </ul>
-                </div>
-                <hr/>
+            
                 <div class="container-fluid instructions">
 <h2>Cooking Instructions</h2>
             
