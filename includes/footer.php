@@ -1,7 +1,7 @@
         <footer>
             
             <div class="container">
-                <hr/>
+                
                 <div class="footerLeft">
                     &copy <?=date("Y")?>
                 </div>
@@ -33,6 +33,19 @@
                         $(this).parent().parent().remove();
                     });
                     
+                    $(".txtNewIngredient").hide();
+                    $("#ingredientsContainer").on('change','.selIngredient', function(){
+                        if($(this).val()==0){
+                            $(this).siblings(".txtNewIngredient").val("");
+                             $(this).siblings(".txtNewIngredient").show();
+                        }else{
+                             $(this).siblings(".txtNewIngredient").val("");
+                             $(this).siblings(".txtNewIngredient").hide();
+                        }
+                    });
+                    
+                    
+                    
                     $("#instructionsContainer").on('click','.addStep', function(){
                         $(".instruction").first().clone().appendTo("#instructionsContainer");
                     });
@@ -41,29 +54,17 @@
                     });
                 }
                 
-                
-                
-                
+                if ( $( ".txtNewCuisine" ).length && $( ".selCuisine" ).length) {
+                    $( ".selCuisine" ).change(function(){
+                        $( ".txtNewCuisine" ).val("");
+                        if($( ".selCuisine" ).val()==0){
+                            $( ".txtNewCuisine" ).show();
+                        }else{
+                            $( ".txtNewCuisine" ).hide();
+                        }
+                    });
+                }
         });
-        
-        
-        
-        // function buildIngredientDropDown(){
-        //     $.getJSON("includes/ingredient", function(result){
-        //         $.each(result, function(i, field){
-        //             $("div").append(field + " ");
-        //         });
-        //     });
-            
-            
-            
-        //     $.each(selectValues, function(key, value) {   
-        //         $('#mySelect')
-        //             .append($("<option></option>")
-        //             .attr("value",key)
-        //             .text(value)); 
-        //     });
-        // }
         
         </script>
     </body>

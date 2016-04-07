@@ -11,7 +11,7 @@ require_once "includes/cuisine.php";
 require_once "includes/ingredient.php";
 $error = '';
 if(count($_POST)>0){
-     $result = Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description']);
+     $result = Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description'],$_POST['txtNewCuisine'],$_POST['newIngredients']);
      if($result==='success'){
          header('Location: index.php');
      }else{
@@ -42,7 +42,8 @@ require_once 'includes/header.php';
             </div>
             <div class="form-group">
                 <label for="cuisine">Cuisine:</label>
-            <select name="cuisine" class="form-control">
+            <select name="cuisine" class="selCuisine form-control ">
+                <option value="0">Add New Cuisine</option>
             <?php
             foreach($cuisines as $cuisine){
                 ?>
@@ -51,6 +52,7 @@ require_once 'includes/header.php';
             }
             ?>    
             </select>
+            <input type="text" name="txtNewCuisine" class="txtNewCuisine form-control" id="txtNewCuisine" placeholder="New Cuisine Name" />
             </div>
             
            
@@ -101,7 +103,8 @@ require_once 'includes/header.php';
             <div class="ingredient controls">
                 <div class="form-group">
                     <label>Ingredient:</label>
-                    <select name="ingredients[]" class="form-control">
+                    <select name="ingredients[]" class="form-control selIngredient">
+                        <option value="0">Add New Ingredient</option>
                         <?php
                         foreach($ingredients as $ingredient){
                             ?>
@@ -110,6 +113,7 @@ require_once 'includes/header.php';
                         }
                         ?>    
                     </select>
+                    <input type="text" class="txtNewIngredient form-control" name="newIngredients[]" class="form-control" placeholder="Add New Ingredient" />
                     <label>Quantity:</label>
                     <input type="text" name="quantities[]" class="form-control" required/>
                     <div class="addIngredient btn btn-default form-control">+</div>

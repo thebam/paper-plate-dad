@@ -25,11 +25,24 @@ class Recipe
     public $quantities = array();
     public $instructions = array();
 
-    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc){
+    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc,$tempNewCuisine,$tempNewIngredients){
         $output="";
         if(!empty(trim($tempTitle)))
         {
             $connection = openConnection();
+            
+            if($tempCuisineId=="0"){
+                $query = 'INSERT INTO Cuisines (Title) VALUES (:title)';
+                $statement = $connection->prepare($query);
+                $statement->bindParam(':title',$tempNewCuisine, \PDO::PARAM_STR);
+                
+                $statement->execute();
+                if($connection->lastInsertId()){
+                    $tempCuisineId = $connection->lastInsertId();
+                }
+            }
+            
+            
             $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime,Description) VALUES (:title,:mainIngredientId,:cuisineId,:url,:tasteRating,:notes,:imageUrl,:videoUrl,:prepRating,:cleanRating,:servings,:prepTime,:description)';
             $statement = $connection->prepare($query);
             $statement->bindParam(':title',$tempTitle, \PDO::PARAM_STR);
@@ -51,6 +64,19 @@ class Recipe
                 if(count($tempIngredients) > 0){
                     if(count($tempIngredients) == count($tempQuantities)){
                         for ($x=0;$x<count($tempIngredients);$x++) {
+                            if($tempIngredients[$x]=="0"){
+                                $query = 'INSERT INTO Ingredients (Title) VALUES (:title)';
+                                $statement = $connection->prepare($query);
+                                $statement->bindParam(':title',$tempNewIngredients[$x], \PDO::PARAM_STR);
+                                
+                                $statement->execute();
+                                if($connection->lastInsertId()){
+                                    $tempIngredients[$x] = $connection->lastInsertId();
+                                }
+                                
+                            }
+                            
+                            
                             $query = 'INSERT INTO recipeIngredients (RecipeId, IngredientId,Quantity) VALUES (:id,:ingredientId,:quantity)';
                             $statement = $connection->prepare($query);
                             $statement->bindParam(':id',$id, \PDO::PARAM_INT);
@@ -214,7 +240,7 @@ class Recipe
             $recipes = Recipe::search($keyword);
         }else{
             $connection = openConnection();
-            $statement = $connection->prepare('SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime FROM recipes ORDER BY Title');
+            $statement = $connection->prepare('SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime,DateModified FROM recipes ORDER BY Title');
             $statement->execute();
             $results = $statement->setFetchMode(\PDO::FETCH_ASSOC);
             if($results){

@@ -142,6 +142,11 @@
             padding: 0 0 15px 0;
  
         }
+        
+        .instructions{
+            background-color: #fff;
+            color: #000;
+        }
         .instruction{
             margin-bottom:15px;
         }
@@ -155,6 +160,7 @@
         }
        
         footer{
+            padding-top: 30px;
             padding-bottom: 60px;
         }
         .footerLeft{
@@ -180,6 +186,18 @@
         }
         .form-inline .form-group textarea {
             width:100%;
+        }
+        
+        
+        .txtNewCuisine{
+            display: none;
+        }
+        
+        .txtNewIngredient{
+            display: none;
+        }
+        .fbCommentWrapper{
+            padding: 15px;
         }
         
         

@@ -41,7 +41,7 @@ require_once 'includes/header.php';
             </div>
             <div class="form-group">
                 <label for="cuisine">Cuisine:</label>
-            <select name="cuisine" class="form-control">
+            <select name="cuisine" class="selCuisine form-control ">
                 <option value="0">Add New Cuisine</option>
             <?php
             foreach($cuisines as $cuisine){
@@ -56,7 +56,7 @@ require_once 'includes/header.php';
             }
             ?>    
             </select>
-            <input type="text" name="txtNewCuisine" class="form-control" id="txtNewCuisine" />
+            <input type="text" name="txtNewCuisine" class="txtNewCuisine form-control" id="txtNewCuisine" placeholder="New Cuisine Name" />
             </div>
 
             <div class="form-group">
@@ -135,7 +135,7 @@ require_once 'includes/header.php';
             <div class="ingredient controls form-inline">
                 <div class="form-group">
                     <label>Ingredient:</label>
-                    <select name="ingredients[]" class="form-control">
+                    <select name="ingredients[]" class="form-control selIngredient">
                         <option value="0">Add New Ingredient</option>
                         <?php
                         foreach($ingredients as $ingredient){
@@ -150,10 +150,11 @@ require_once 'includes/header.php';
                     }
                     ?>       
                     </select>
+                    <input type="text" class="txtNewIngredient form-control" name="newIngredients[]" class="form-control" placeholder="Add New Ingredient" />
                     <label>Quantity:</label>
                     <input type="text" name="quantities[]" class="form-control" value="<?=$myRecipe->quantities[$ingredientCnt]?>" required/>
                     
-                    <input type="text" name="newIngredients[]" class="form-control" value="" />
+                    
                     
                     <div class="addIngredient btn btn-default form-control">+</div>
                     <div class="removeIngredient btn btn-default form-control">-</div>

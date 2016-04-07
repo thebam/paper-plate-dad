@@ -32,8 +32,8 @@ require_once 'includes/header.php';
             <p>CUISINE :<?=$myRecipe->cuisineName?></p>
             <p>SERVINGS :<?=$myRecipe->servings?></p>
             <p>TOTAL TIME :<?=$myRecipe->prepTimeInMinutes?> minutes</p>
-            <p>RECIPE SOURCE : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
-            <hr/>
+            
+           
             <p>TASTE :
             
             <?php
@@ -80,9 +80,10 @@ require_once 'includes/header.php';
             }
             ?>
             </p>
+            <p>RECIPE SOURCE : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
             <hr/>
-            <div class="container-fluid ingredients">
-            <h2>Ingredients</h3>
+            <div class=" ingredients">
+            <h2>Ingredients</h2>
             <ul>
                 <?php
                 for ($x=0;$x<count($myRecipe->ingredients);$x++) {
@@ -95,6 +96,9 @@ require_once 'includes/header.php';
                 </div>
                 
             
+            <hr/>
+            <h2>Notes</h2>
+            <p><?=$myRecipe->notes?></p>
             
             
             </div>
@@ -143,14 +147,18 @@ require_once 'includes/header.php';
                 foreach ($myRecipe->instructions as $instruction) {
                     $instuctionCnt++
                 ?>
+                
+                
+                
                 <div class="instruction col-md-6">
-                    <div class="instructionNumber col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                        <?=$instuctionCnt?>
-                    </div>
-                    <div class="instructionDetail col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                        <?=$instruction?>
-                    </div>
-                    <div class="clearfix"></div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">STEP <?=$instuctionCnt?></div>
+                            <div class="panel-body">
+                                <?=$instruction?>
+                                </div>
+                                </div>
+                    
+                    
                 </div>
                 <?php
                 }
@@ -159,14 +167,10 @@ require_once 'includes/header.php';
             
             </div>
             
-            <hr/>
-            <div class="container-fluid">
-            <h2>Notes</h2>
-            <p><?=$myRecipe->notes?></p>
-            </div>
-            <hr/>
-            <div class="fb-comments" data-href="http://paperplatedad.com/showRecipe.php?<?=$_SERVER['QUERY_STRING']?>" data-numposts="3" data-colorscheme="dark"  data-width="100%"></div>
             
+            <div class="fbCommentWrapper">
+            <div class="fb-comments" data-href="http://paperplatedad.com/showRecipe.php?<?=$_SERVER['QUERY_STRING']?>" data-numposts="3" data-colorscheme="dark"  data-width="100%"></div>
+            </div>
             
             
             <div id="fb-root"></div>
