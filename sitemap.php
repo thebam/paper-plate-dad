@@ -1,14 +1,13 @@
 <?php
-namespace Cooking;
-header('Content-type: application/xml');
+header('Content-type: text/xml');
 require_once 'includes/recipe.php';
-
-$recipes = Recipe::allRecipes();
- $output = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-  $output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-  echo $output;
-  ?>
-  <url>
+$recipes = \Cooking\Recipe::allRecipes("");
+$output = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+ob_clean();
+echo $output;
+?>
+<url>
     <loc>http://paperplatedad.com/</loc>
     <lastmod>2016-04-06 06:19:25</lastmod>
     <changefreq>weekly</changefreq>
