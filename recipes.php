@@ -4,18 +4,33 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 require_once 'includes/recipe.php';
+$keyword = "";
+$recipeSearchTerm  = "";
+if(count($_GET)>0){
+    $keyword = $_GET['q'];
+    $recipeSearchTerm = $keyword;
+}
+$recipes = Recipe::allRecipes($keyword);
 
-$recipes = Recipe::getFeaturedRecipes();
-
-$pageTitle = "Paper Plate Dad";
-$pageDescription = "The cooking adventures of a husband and father.";
+$pageTitle = "Recipes";
+$pageDescription = "A list of all available recipes.";
 $pageURL = "";
 $pageImage = "http://paperplatedad.com/photos/empty-plates.jpg";
 require_once 'includes/header.php';
 ?>
 <div class="container">
     <h1>Recipes</h1>
-
+    <?php
+    if(!empty(trim($recipeSearchTerm))){
+    ?>
+        <hr/>
+        <h2>search results for <em>'<?=$recipeSearchTerm?>'</em></h2>
+    <?php
+        if(count($recipes)===0){
+            echo "No recipes found. Please try a different search term. You can search for recipes by title or ingredient.";
+        }
+    }
+    ?>
         <?php
         if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
         ?>
@@ -68,11 +83,6 @@ require_once 'includes/header.php';
                 if (array_key_exists('Servings',$recipe)){ 
                     $servings =  $recipe['Servings'];
                 }
-                
-                
-                // ADD video, description, and notes
-                
-                
                 
                 $descriptionBlock = '<a href="showRecipe.php?name='.urlencode($title).'"><div class="col-md-3 recipeDetails">';
                 $descriptionBlock .= '<h2>'.$title.'</h2>';

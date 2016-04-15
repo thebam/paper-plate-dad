@@ -11,7 +11,11 @@ require_once "includes/cuisine.php";
 require_once "includes/ingredient.php";
 $error = '';
 if(count($_POST)>0){
-     $result = Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description'],$_POST['txtNewCuisine'],$_POST['newIngredients']);
+    $featured = 0;
+    if($_POST['featured']=='yes'){
+        $featured = 1;
+    }
+     $result = Recipe::addRecipe($_POST['title'],$_POST['mainIngredient'],$_POST['cuisine'],$_POST['url'],$_POST['tasteRating'],$_POST['notes'],$_POST['imageUrl'],$_POST['videoUrl'],$_POST['preparationRating'],$_POST['cleanUpRating'],$_POST['ingredients'],$_POST['quantities'],$_POST['instructions'],$_POST['servings'],$_POST['prepTime'],$_POST['description'],$_POST['txtNewCuisine'],$_POST['newIngredients'],$featured);
      if($result==='success'){
          header('Location: index.php');
      }else{
@@ -28,6 +32,12 @@ require_once 'includes/header.php';
         <h1>Add Recipe</h1>
         <p><?=$error?></p>
         <form action="addRecipe.php" method="post" role="form">
+            
+            <div class="checkbox">
+                <label><input name="featured" type="checkbox" value="yes">Featured on Home page?</label>
+            </div>
+            
+            
             <div class="form-group">
                 <label for="title">Title:</label>
                 <input type="text" name="title" class="form-control"  required/>

@@ -18,6 +18,14 @@
             text-transform: uppercase;
         }
         
+        header .logoTitle a{
+            color: #fff;
+        }
+        
+        header .logoTitle a:hover{
+            text-decoration: none;
+        }
+        
         header nav ul{
             list-style: none;
         }

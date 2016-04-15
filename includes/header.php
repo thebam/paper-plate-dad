@@ -41,15 +41,15 @@
 
 <body>
     <header>
-        <div class="logoTitle">Paper Plate Dad</div>
+        <div class="logoTitle"><a href="index.php">Paper Plate Dad</a></div>
         <nav>
             <ul>
-                <li><a href="index.php">Recipes</a></li>
+                <li><a href="recipes.php">Recipes</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="contact.php">Contact</a></li>
             </ul>
             <div class="container">
-                <form action="index.php" method="get">
+                <form action="recipes.php" method="get">
                 
                 
                 <div class="input-group">

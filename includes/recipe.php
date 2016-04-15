@@ -13,7 +13,6 @@ class Recipe
     public $tasteRating;
     public $notes;
     public $dateModified;
-    
     public $imageUrl;
     public $videoUrl;
     public $prepRating;
@@ -21,11 +20,11 @@ class Recipe
     public $servings;
     public $prepTimeInMinutes;
     public $description;
+    public $featured;
     public $ingredients = array();
     public $quantities = array();
     public $instructions = array();
-
-    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc,$tempNewCuisine,$tempNewIngredients){
+    public static function addRecipe($tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc,$tempNewCuisine,$tempNewIngredients,$tempFeatured){
         $output="";
         if(!empty(trim($tempTitle)))
         {
@@ -43,7 +42,8 @@ class Recipe
             }
             
             
-            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime,Description) VALUES (:title,:mainIngredientId,:cuisineId,:url,:tasteRating,:notes,:imageUrl,:videoUrl,:prepRating,:cleanRating,:servings,:prepTime,:description)';
+            
+            $query = 'INSERT INTO recipes (Title, MainIngredientId,CuisineId,Url,TasteRating,Notes,ImageUrl,VideoUrl,PrepRating,CleanRating,Servings,PrepTime,Description,Featured) VALUES (:title,:mainIngredientId,:cuisineId,:url,:tasteRating,:notes,:imageUrl,:videoUrl,:prepRating,:cleanRating,:servings,:prepTime,:description,:featured)';
             $statement = $connection->prepare($query);
             $statement->bindParam(':title',$tempTitle, \PDO::PARAM_STR);
             $statement->bindParam(':mainIngredientId',$tempMainIngredientId, \PDO::PARAM_INT);
@@ -58,6 +58,7 @@ class Recipe
             $statement->bindParam(':servings',$tempServings, \PDO::PARAM_INT);
             $statement->bindParam(':prepTime',$tempPrepTime, \PDO::PARAM_INT);
             $statement->bindParam(':description',$tempDesc, \PDO::PARAM_STR);
+            $statement->bindParam(':featured',$tempFeatured, \PDO::PARAM_BOOL);
             $statement->execute();
             if($connection->lastInsertId()){
                 $id = $connection->lastInsertId();
@@ -126,7 +127,7 @@ class Recipe
         }
     }
     
-    public static function editRecipe($id,$tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc,$tempNewCuisine,$tempNewIngredients){
+    public static function editRecipe($id,$tempTitle, $tempMainIngredientId,$tempCuisineId,$tempUrl,$tempTaste,$tempNotes,$tempImage,$tempVideo,$tempPrep,$tempClean,$tempIngredients,$tempQuantities,$tempSteps,$tempServings,$tempPrepTime,$tempDesc,$tempNewCuisine,$tempNewIngredients,$tempFeatured){
         if(!empty(trim($id)) && !empty(trim($tempTitle)))
         {
             $connection = openConnection();
@@ -143,7 +144,7 @@ class Recipe
             }
             
             
-            $query = 'UPDATE recipes SET Title=:title, MainIngredientId=:mainIngredientId,CuisineId=:cuisineId, Url=:url,TasteRating=:tasteRating,Notes=:notes,ImageUrl=:imageUrl,VideoUrl=:videoUrl,PrepRating=:prepRating,CleanRating=:cleanRating,Servings=:servings,PrepTime=:prepTime,Description=:description WHERE id=:id';
+            $query = 'UPDATE recipes SET Title=:title, MainIngredientId=:mainIngredientId,CuisineId=:cuisineId, Url=:url,TasteRating=:tasteRating,Notes=:notes,ImageUrl=:imageUrl,VideoUrl=:videoUrl,PrepRating=:prepRating,CleanRating=:cleanRating,Servings=:servings,PrepTime=:prepTime,Description=:description,Featured=:featured WHERE id=:id';
             
             $statement = $connection->prepare($query);
             $statement->bindParam(':title',$tempTitle, \PDO::PARAM_STR);
@@ -159,6 +160,7 @@ class Recipe
             $statement->bindParam(':servings',$tempServings, \PDO::PARAM_INT);
             $statement->bindParam(':prepTime',$tempPrepTime, \PDO::PARAM_INT);
             $statement->bindParam(':description',$tempDesc, \PDO::PARAM_STR);
+            $statement->bindParam(':featured',$tempFeatured, \PDO::PARAM_BOOL);
             $statement->bindParam(':id',$id, \PDO::PARAM_INT);
             $statement->execute();
             
@@ -240,7 +242,7 @@ class Recipe
             $recipes = Recipe::search($keyword);
         }else{
             $connection = openConnection();
-            $statement = $connection->prepare('SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime,DateModified FROM recipes ORDER BY Title');
+            $statement = $connection->prepare('SELECT Id, Title, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime,DateModified FROM recipes ORDER BY Id DESC');
             $statement->execute();
             $results = $statement->setFetchMode(\PDO::FETCH_ASSOC);
             if($results){
@@ -277,12 +279,29 @@ class Recipe
                 $this->servings = $results['Servings'];
                 $this->prepTimeInMinutes = $results['PrepTime'];
                 $this->description = $results['Description'];
+                $this->featured = $results['Featured'];
             }
             $connection = null;
             $this->getRecipeInstructions();
             $this->getRecipeIngredients();
             $this->cuisineName = $this->getCuisineNameById($this->cuisineId);
         }
+    }
+    
+    public static function getFeaturedRecipes(){
+            $connection = openConnection();
+            $recipes=array();        
+            $query = 'SELECT Title,CuisineId, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime,Notes,VideoUrl,Description FROM recipes WHERE Featured = 1';
+            $statement = $connection->prepare($query); 
+            $statement->execute();
+            $results = $statement->setFetchMode(\PDO::FETCH_ASSOC);
+            if($results){
+                while ($row = $statement->fetch()) {
+                    $recipes[]=$row;
+                }
+            }
+            $connection = null;
+        return ($recipes);
     }
      
     private function getRecipeInstructions(){
