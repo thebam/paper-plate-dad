@@ -139,7 +139,7 @@ require_once 'includes/header.php';
         
             
             
-                <div class="container-fluid instructions">
+                <div class="container-fluid altBackground">
 <h2>Cooking Instructions</h2>
             
                 <?php

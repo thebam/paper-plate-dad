@@ -13,21 +13,11 @@ $pageURL = "";
 $pageImage = "http://paperplatedad.com/photos/empty-plates.jpg";
 require_once 'includes/header.php';
 ?>
-<div class="container">
-    <h1>Recipes</h1>
 
-        <?php
-        if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
-        ?>
-        <a href="addRecipe.php">Add Recipe</a>
-        <?php
-        }
-        ?>
-        </div>
-        <div class="recipes container-fluid">
+        <div class="container-fluid">
         
             <?php
-            $id = 0;
+
             $title = '';
             $tasteRating = 0;
             $prepRating = 0;
@@ -36,10 +26,11 @@ require_once 'includes/header.php';
             $prepTimeInMinutes=1;
             $servings=1;
             $recipeCnt = 0;
-            $blnAlternate = false;
+
+            $description = '';
+            $videoUrl='';
             
-            
-            $descriptionBlock="";
+
             foreach($recipes as $recipe){
                 if (array_key_exists('Id',$recipe)){ 
                     $id =  $recipe['Id'];
@@ -69,71 +60,119 @@ require_once 'includes/header.php';
                     $servings =  $recipe['Servings'];
                 }
                 
-                
-                // ADD video, description, and notes
-                
-                
-                
-                $descriptionBlock = '<a href="showRecipe.php?name='.urlencode($title).'"><div class="col-md-3 recipeDetails">';
-                $descriptionBlock .= '<h2>'.$title.'</h2>';
-                $descriptionBlock .= '<p><strong>'.$servings.'</strong> Servings<br/>';
-                $descriptionBlock .= '<strong>Difficulty: </strong>'.$prepRating.' out of 5<br/>';
-                $descriptionBlock .= '<strong>Total Time: </strong>'.$prepTimeInMinute.' Minutes</p>';
-                
-                if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
-                    $descriptionBlock .= '<p>';
-                    $descriptionBlock .= '<a href="editRecipe.php?name='.urlencode($title).'">edit</a> - ';
-                    $descriptionBlock .= '<a href="deleteRecipe.php?id='.$id.'">delete</a></p>';
+                if (array_key_exists('VideoUrl',$recipe)){ 
+                    $videoUrl =  $recipe['VideoUrl'];
                 }
-                $descriptionBlock .= '</div></a>';
                 
-                if ($recipeCnt ===0){
-                    ?>
-                    <div class="row">
-                   <?php 
+                if (array_key_exists('Description',$recipe)){ 
+                    $description =  $recipe['Description'];
                 }
-                if($blnAlternate==false){
+                
+                if($recipeCnt==0){
                 ?>
-                    <div class="col-md-3 recipeImage">
-                        <img class="food" src="<?=$imageUrl?>" alt="<?=$title?>" />
-                        <div class="arrow">
-                            <img src="images/arrow-left.png"/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1><?=$title?></h1>
                         </div>
+                        </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php
+                        if($videoUrl != null){
+                        ?>
+                        <div class="bs-example" data-example-id="responsive-embed-16by9-iframe-youtube"> 
+                            <div class="embed-responsive embed-responsive-16by9"> 
+                                <iframe class="embed-responsive-item" src="<?=$videoUrl?>" allowfullscreen=""></iframe> 
+                            </div> 
+                        </div>
+                        <?php
+                        }else{
+                        ?>
+                            <img class="img-responsive" src="<?=$imageUrl?>" alt="<?=$title?>" />
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <div class="col-md-6">
+                        
+                         <p><?=$description?></p>
+                         <hr/>
+                        <p>SERVINGS :<?=$servings?></p>
+                        <p>TOTAL TIME :<?=$prepTimeInMinutes?> minutes</p>
+                        
+                    
+                        <p>TASTE :
+                        
+                        <?php
+                        for($x=1;$x<6;$x++){
+                            if($x<=$tasteRating){
+                            ?>
+                            <i class="star glyphicon glyphicon-star"></i>
+                            <?php
+                            }else{
+                                ?>
+                            <i class="star glyphicon glyphicon-star-empty"></i>
+                            <?php
+                            }
+                        }
+                        ?>
+                        </p>
+                        <p>PREPARATION :
+                        <?php
+                        for($x=1;$x<6;$x++){
+                            if($x<=$prepRating){
+                            ?>
+                            <i class="star glyphicon glyphicon-star"></i>
+                            <?php
+                            }else{
+                                ?>
+                            <i class="star glyphicon glyphicon-star-empty"></i>
+                            <?php
+                            }
+                        }
+                        ?>
+                        </p>
+                        <p>CLEAN UP :
+                        <?php
+                        for($x=1;$x<6;$x++){
+                            if($x<=$cleanRating){
+                            ?>
+                            <i class="star glyphicon glyphicon-star"></i>
+                            <?php
+                            }else{
+                                ?>
+                            <i class="star glyphicon glyphicon-star-empty"></i>
+                            <?php
+                            }
+                        }
+                        ?>
+                        </p>
+                         <a class="btn btn-default" href="showRecipe.php?name=<?=urlencode($title)?>">VIEW RECIPE</a>
                     </div>
                     
-                  <?php
-                  echo $descriptionBlock;
-                }else{
-                  ?>
-                  <div class="recipe rowBackwards">
-           <?= $descriptionBlock?>
-            <div class="col-md-3 recipeImage">
-                <img class="food" src="<?=$imageUrl?>" alt="<?=$title?>" />
-                <div class="arrow">
-                    <img src="images/arrow-right.png"/>
                 </div>
-            </div>
-            </div>
-            <?php
+                <hr/>
+                <h2>Related Recipes</h2>
+                <div class="row">
+                   <?php
+                }else{
+                    ?>
+                    
+                        <div class="col-md-4">
+                            
+                                <img class="img-responsive" src="<?=$imageUrl?>" alt="<?=$title?>" />
+                              <h3><a href="showRecipe.php?name=<?=urlencode($title)?>"><?=$title?></a></h1>
+                        </div>
+                    
+                        
+                        
+                    <?php
                 }
                 $recipeCnt++;
-                if ((intval($recipeCnt) % 2) === 0){
-                    if($blnAlternate){
-                        $blnAlternate = false;
-                    }else{
-                        $blnAlternate = true;
-                    }
-                    
-                    
-                    ?>
-                    </div>
-                    <div class="row">
-                   <?php 
-                }
-            }    
-            ?>
-                    </div>
-        
+                   }
+                   ?>
+        </div>
     </div>
     <?php
     require_once 'includes/footer.php';

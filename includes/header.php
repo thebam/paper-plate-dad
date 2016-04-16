@@ -45,19 +45,22 @@
         <nav>
             <ul>
                 <li><a href="recipes.php">Recipes</a></li>
+                <?php
+                if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
+                ?>
+                <li><a href="addRecipe.php">Add Recipe</a></li>
+                <?php
+                }
+                ?>
                 <li><a href="about.php">About</a></li>
                 <li><a href="contact.php">Contact</a></li>
             </ul>
-            <div class="container">
+            <div class="container searchContainer">
                 <form action="recipes.php" method="get">
-                
-                
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="search by ingredient or recipe title" />
-                    <span class="input-group-btn"> <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-cutlery"></span></button> </span> 
-                </div>
-                
-                
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="search by ingredient or recipe title" />
+                        <span class="input-group-btn"> <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-cutlery"></span></button> </span> 
+                    </div>
                 </form>
             </div>
         </nav>

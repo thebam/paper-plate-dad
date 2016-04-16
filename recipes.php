@@ -31,13 +31,7 @@ require_once 'includes/header.php';
         }
     }
     ?>
-        <?php
-        if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
-        ?>
-        <a href="addRecipe.php">Add Recipe</a>
-        <?php
-        }
-        ?>
+        
         </div>
         <div class="recipes container-fluid">
         
