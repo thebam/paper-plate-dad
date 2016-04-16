@@ -291,7 +291,7 @@ class Recipe
     public static function getFeaturedRecipes(){
             $connection = openConnection();
             $recipes=array();        
-            $query = 'SELECT DISTINCT Title,CuisineId, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime,Notes,VideoUrl,Description FROM recipes WHERE Featured = 1 OR MainIngredientId = (SELECT MainIngredientId FROM recipes WHERE Featured = 1)';
+            $query = 'SELECT DISTINCT Title,CuisineId, TasteRating,PrepRating,CleanRating, ImageUrl,Servings,PrepTime,Notes,VideoUrl,Description FROM recipes WHERE Featured = 1 OR MainIngredientId = (SELECT MainIngredientId FROM recipes WHERE Featured = 1) ORDER BY Featured DESC';
             $statement = $connection->prepare($query); 
             $statement->execute();
             $results = $statement->setFetchMode(\PDO::FETCH_ASSOC);
