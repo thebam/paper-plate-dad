@@ -22,7 +22,7 @@ if(count($_GET)>0){
 require_once 'includes/header.php';
 ?>
 
-        <div class="hero" >
+        <div class="hero container" >
             <h1><?=$myRecipe->title?></h1>
            <img class="bgImage" src="<?=$imageUrl?>"/>
                 <div class="col-md-4">
@@ -80,7 +80,7 @@ require_once 'includes/header.php';
             }
             ?>
             </p>
-            <p>RECIPE SOURCE : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
+            
             <hr/>
             <div class=" ingredients">
             <h2>Ingredients</h2>
@@ -96,9 +96,6 @@ require_once 'includes/header.php';
                 </div>
                 
             
-            <hr/>
-            <h2>Notes</h2>
-            <p><?=$myRecipe->notes?></p>
             
             
             </div>
@@ -134,18 +131,33 @@ require_once 'includes/header.php';
             
             <div class="clearfix">
             </div>
+            <div class="col-md-12">
+                <hr/>
+            <h2>Notes</h2>
+            <p><?=$myRecipe->notes?></p>
+            <p>RECIPE SOURCE : <a href='<?=$myRecipe->url?>' target='_blank'><?=$myRecipe->url?></a></p>
+                </div>
         </div>
         
         
             
             
-                <div class="container-fluid altBackground">
+                <div class="container altBackground">
 <h2>Cooking Instructions</h2>
-            
+            <div class="row">
                 <?php
                 $instuctionCnt =0;
                 foreach ($myRecipe->instructions as $instruction) {
-                    $instuctionCnt++
+                    
+                    
+                    if($instuctionCnt % 2 == 0 && $instuctionCnt>0){
+                        ?>
+                        </div>
+                        <div class="row">
+                        <?php
+                        
+                    }
+                    $instuctionCnt++;
                 ?>
                 
                 
@@ -164,14 +176,15 @@ require_once 'includes/header.php';
                 }
                 ?>
                 
-            
+            </div>
             </div>
             
             
-            <div class="fbCommentWrapper">
-            <div class="fb-comments" data-href="http://paperplatedad.com/showRecipe.php?<?=$_SERVER['QUERY_STRING']?>" data-numposts="3" data-colorscheme="dark"  data-width="100%"></div>
+            <div class="container">
+                <div class="row">
+            <div class="fb-comments col-md-12" data-href="http://paperplatedad.com/showRecipe.php?<?=$_SERVER['QUERY_STRING']?>" data-numposts="3" data-colorscheme="dark"  data-width="100%"></div>
             </div>
-            
+            </div>
             
             <div id="fb-root"></div>
 <script>(function(d, s, id) {

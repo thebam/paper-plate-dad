@@ -33,7 +33,7 @@ require_once 'includes/header.php';
     ?>
         
         </div>
-        <div class="recipes container-fluid">
+        <div class="recipes container">
         
             <?php
             $id = 0;
@@ -81,8 +81,25 @@ require_once 'includes/header.php';
                 $descriptionBlock = '<a href="showRecipe.php?name='.urlencode($title).'"><div class="col-md-3 recipeDetails">';
                 $descriptionBlock .= '<h2>'.$title.'</h2>';
                 $descriptionBlock .= '<p><strong>'.$servings.'</strong> Servings<br/>';
-                $descriptionBlock .= '<strong>Difficulty: </strong>'.$prepRating.' out of 5<br/>';
-                $descriptionBlock .= '<strong>Total Time: </strong>'.$prepTimeInMinute.' Minutes</p>';
+                
+                $descriptionBlock .= '<strong>Difficulty:</strong>';
+                        
+                        for($x=1;$x<6;$x++){
+                            if($x<=$prepRating){
+                            
+                            $descriptionBlock .= '<i class="star glyphicon glyphicon-star"></i>';
+                           
+                            }else{
+                                
+                            $descriptionBlock .= '<i class="star glyphicon glyphicon-star-empty"></i>';
+                            
+                            }
+                        }
+                        
+                        
+                
+                
+                $descriptionBlock .= '<br/><strong>Total Time: </strong>'.$prepTimeInMinute.' Minutes</p>';
                 
                 if(isset($_SESSION["id"]) && isset($_SESSION["username"])){
                     $descriptionBlock .= '<p>';

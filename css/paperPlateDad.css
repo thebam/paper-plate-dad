@@ -206,9 +206,7 @@
         .txtNewIngredient{
             display: none;
         }
-        .fbCommentWrapper{
-            padding: 15px;
-        }
+       
         .glyphicon-star{
             font-size: 1.65em;
         }
@@ -270,7 +268,7 @@
         }
  @media screen and (min-width:1200px){
      .recipes .row .recipeDetails h2{
-            font-size: 2em;
+            font-size: 1.45em;
         }
      
  }
